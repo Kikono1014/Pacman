@@ -32,9 +32,7 @@ class PacmanGame:
 
 
 
-
-
-    def __init__(self, frame_rate, width, height, scale):
+    def __init__(self, frame_rate, width, height, scale, preset):
         self.frame_rate = frame_rate
         self.scale = scale
         self.width  = width  * self.scale
@@ -48,7 +46,7 @@ class PacmanGame:
         self.sprites = {}
         self.sprites_init()
 
-        self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], 2)
+        self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
         #! Test objects
         self.pacman = Moveable(self.sprites["pacman"], (0, 0), (0, 1), 1.08)
@@ -103,7 +101,16 @@ class PacmanGame:
 
 if __name__ == '__main__':
     pygame.init()
-    game = PacmanGame(10, 232, 256, 4)
+
+    preset = 1
+    scale = 2
+
+    if len(sys.argv) >= 2:
+        preset = int(sys.argv[1])
+    if len(sys.argv) >= 3:
+        scale = int(sys.argv[2])
+
+    game = PacmanGame(10, 232, 256, scale, preset)
     
     while game.playing:
         game.proceed_event()
