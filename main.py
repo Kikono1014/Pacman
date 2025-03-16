@@ -8,13 +8,8 @@ class PacmanGame:
 
     def sprites_init(self):
         sprites = pygame.image.load('sprites/pacman_sprites.png')
-        sprite = Sprite(sprites, pygame.Rect(32, 0, 16, 16)).scale(self.scale)
-        self.pacman = GameObject(
-            [sprite],
-            (0, 0),
-            (0, 1),
-            sprite.area.move(8 * self.scale, 8 * self.scale))
-
+        self.pacman = Sprite(sprites, pygame.Rect(32, 0, 16, 16))
+        self.pacman.scale(self.scale)
 
 
     def __init__(self, frame_rate, width, height, scale):
@@ -37,15 +32,19 @@ class PacmanGame:
         self.playing = True
         self.game_over = False
 
-    def render_object(self, object: GameObject):
-        self.screen.blit(object.sprites[object.current].texture, object.hitbox, object.sprites[object.current].area)
+    def render_sprite(self, sprite: Sprite, scale : int):
+        hitbox = sprite.area.move(8 * scale, (8+16) * scale)
+        
+        
+
+        self.screen.blit(sprite.texture, hitbox, sprite.area)
 
 
     def render(self):
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.background, (0, 0))
         
-        self.render_object(self.pacman)
+        self.render_sprite(self.pacman, 3)
 
     def update(self):
         pygame.display.update()
@@ -58,18 +57,6 @@ class PacmanGame:
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE or e.key == pygame.K_q:
                     self.playing = False
-                if e.key == pygame.K_w or e.key == pygame.K_UP:
-                    self.pacman.rotate((0, -1))
-                    self.pacman.move(8)
-                if e.key == pygame.K_a or e.key == pygame.K_LEFT:
-                    self.pacman.rotate((-1, 0))
-                    self.pacman.move(8)
-                if e.key == pygame.K_s or e.key == pygame.K_DOWN:
-                    self.pacman.rotate((0, 1))
-                    self.pacman.move(8)
-                if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
-                    self.pacman.rotate((1, 0))
-                    self.pacman.move(8)
 
 
 
