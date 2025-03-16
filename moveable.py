@@ -8,6 +8,13 @@ class Moveable(GameObject):
                  position : tuple[int, int], 
                  direction : tuple[int, int],
                  speed : float):
+        """Creates moveable game object
+
+         - sprites: list of Sprite objects that can be used in this object
+         - position: position on the map in dot coordinates
+         - direction: direction of movement right: [1, 0], left: [-1, 0], up: [0, -1], down: [0, 1]
+         - speed: speed of movement, pixels per frame
+        """
         super().__init__(sprites, position)
         self.direction : tuple[int, int] = direction
         self.speed : float = speed
@@ -22,6 +29,7 @@ class Moveable(GameObject):
 
     
     def get_hitbox(self):
+        # self.get_sprite().area.w / 16 is the scale
         return pygame.Rect(
             (self.position[0] + 1) * self.speed * self.get_sprite().area.w / 16,
             (self.position[1] + 1) * self.speed * self.get_sprite().area.w / 16,

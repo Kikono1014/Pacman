@@ -3,7 +3,6 @@ import sys
 from sprite import Sprite
 from gameobject import GameObject
 from moveable import Moveable
-from pygame.locals import (KEYDOWN, K_RIGHT, K_d, K_LEFT, K_a, K_UP, K_w, K_DOWN, K_s, K_ESCAPE)
 
 class PacmanGame:
 
@@ -33,18 +32,17 @@ class PacmanGame:
 
     def __init__(self, frame_rate, width, height, scale):
         self.frame_rate = frame_rate
-        self.width = width * scale
-        self.height = height * scale
+        self.scale = scale
+        self.width  = width  * self.scale
+        self.height = height * self.scale
 
         self.clock = pygame.time.Clock()
 
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.RESIZABLE | pygame.DOUBLEBUF)
+        pygame.display.set_caption("Pacman")
+        self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
+
         self.background = pygame.image.load('sprites/pacman_background.png')
         self.background = pygame.transform.scale(self.background, (self.width, self.height))
-
-        pygame.display.set_caption("Pacman")
-
-        self.scale = scale
 
         self.sprites_init()
 
@@ -60,16 +58,17 @@ class PacmanGame:
         self.screen.blit(self.background, (0, 0))
         
         #! Test objects
-        self.render_object(self.pacman)
         self.render_object(self.dot)
         self.render_object(self.dot1)
         self.render_object(self.dot2)
         self.render_object(self.bonus)
+        self.render_object(self.pacman)
         #!
 
     def update(self):
-        pygame.display.update()
         self.pacman.move()
+
+        pygame.display.update()
 
         self.clock.tick(self.frame_rate)
 
