@@ -14,7 +14,11 @@ class GameObject:
         self.hitbox : pygame.Rect = hitbox
 
     def move(self, value : int):
-        pass
+        print(self.hitbox.x, self.hitbox.y)
+        print(self.direction[0], self.direction[1])
+        self.hitbox.move_ip(
+            self.direction[0] * value,
+            self.direction[1] * value)
 
     def rotate(self, direction : tuple[int, int]):
         self.direction = direction

@@ -12,3 +12,4 @@ class Sprite:
         self.area.w *= scale;
         self.area.h *= scale;
         self.texture = pygame.transform.scale(self.texture, (self.area.w, self.area.h))
+        return self
