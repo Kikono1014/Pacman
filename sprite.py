@@ -3,6 +3,12 @@ import pygame
 
 class Sprite:
     def __init__(self, surface : pygame.Surface, area : pygame.Rect):
+        """Creates a sprite
+
+         - surface: pygame surface to crop sprite from
+         - area: pygame rect, area of sprite on the surface
+        """
+        
         self.texture : pygame.Surface = surface.subsurface(area)
         area.x = 0
         area.y = 0
