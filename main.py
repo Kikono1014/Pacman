@@ -38,7 +38,7 @@ class PacmanGame:
         self.game_over = False
 
     def render_object(self, object: GameObject):
-        self.screen.blit(object.sprites[object.current].texture, object.hitbox, object.sprites[object.current].area)
+        self.screen.blit(object.get_sprite().texture, object.get_hitbox(), object.get_sprite().area)
 
 
     def render(self):
