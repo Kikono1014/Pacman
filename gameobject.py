@@ -6,21 +6,21 @@ class GameObject:
                  sprites : list[Sprite], 
                  position : tuple[int, int], 
                  direction : tuple[int, int],
-                 hitbox : pygame.Rect):
+                 speed : float
+                 ):
         self.sprites : list[Sprite] = sprites
         self.current : int = 0
         self.position : tuple[int, int] = position
         self.direction : tuple[int, int] = direction
+        self.speed : float = speed
 
-    def move(self, value : int):
+    def move(self):
         self.position = tuple(map(sum, zip(self.position, self.direction)))
-        
-        print(self.position)
         
     def get_hitbox(self):
         return pygame.Rect(
-            (self.position[0] + 1) * self.get_sprite().area.w / 2,
-            (self.position[1] + 1) * self.get_sprite().area.w / 2,
+            (self.position[0] + 1) * self.speed * self.get_sprite().area.w / 16,
+            (self.position[1] + 1) * self.speed * self.get_sprite().area.w / 16,
             self.get_sprite().area.w,
             self.get_sprite().area.h)
     

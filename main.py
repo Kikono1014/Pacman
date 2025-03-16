@@ -13,7 +13,7 @@ class PacmanGame:
             [sprite],
             (0, 0),
             (0, 1),
-            sprite.area.move(8 * self.scale, 8 * self.scale))
+            1.08)
 
 
 
@@ -49,7 +49,9 @@ class PacmanGame:
 
     def update(self):
         pygame.display.update()
-        # self.clock.tick(self.frame_rate)
+        self.pacman.move()
+
+        self.clock.tick(self.frame_rate)
 
     def proceed_event(self):
         for e in pygame.event.get():
@@ -60,22 +62,18 @@ class PacmanGame:
                     self.playing = False
                 if e.key == pygame.K_w or e.key == pygame.K_UP:
                     self.pacman.rotate((0, -1))
-                    self.pacman.move(8 * self.scale)
                 if e.key == pygame.K_a or e.key == pygame.K_LEFT:
                     self.pacman.rotate((-1, 0))
-                    self.pacman.move(8 * self.scale)
                 if e.key == pygame.K_s or e.key == pygame.K_DOWN:
                     self.pacman.rotate((0, 1))
-                    self.pacman.move(8 * self.scale)
                 if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
                     self.pacman.rotate((1, 0))
-                    self.pacman.move(8 * self.scale)
 
 
 
 if __name__ == '__main__':
     pygame.init()
-    game = PacmanGame(30, 232, 256, 3)
+    game = PacmanGame(48, 232, 256, 4)
     
     while game.playing:
         game.proceed_event()
