@@ -48,7 +48,7 @@ class PacmanGame:
         self.sprites = {}
         self.sprites_init()
 
-        self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], 1)
+        self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], 2)
 
         #! Test objects
         self.pacman = Moveable(self.sprites["pacman"], (0, 0), (0, 1), 1.08)
