@@ -92,7 +92,7 @@ class PacmanGame:
 
 if __name__ == '__main__':
     pygame.init()
-    game = PacmanGame(48, 232, 256, 4)
+    game = PacmanGame(10, 232, 256, 4)
     
     while game.playing:
         game.proceed_event()
