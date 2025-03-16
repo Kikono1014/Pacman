@@ -1,7 +1,8 @@
 import pygame
 import sys
-from gameobject import GameObject
 from sprite import Sprite
+from gameobject import GameObject
+from moveable import Moveable
 from pygame.locals import (KEYDOWN, K_RIGHT, K_d, K_LEFT, K_a, K_UP, K_w, K_DOWN, K_s, K_ESCAPE)
 
 
@@ -12,12 +13,25 @@ class PacmanGame:
 
     def sprites_init(self):
         sprites = pygame.image.load('sprites/pacman_sprites.png')
+
+        #! Test objects
         sprite = Sprite(sprites, pygame.Rect(32, 0, 16, 16)).scale(self.scale)
-        self.pacman = GameObject(
-            [sprite],
-            (0, 0),
-            (0, 1),
-            1.08)
+        self.pacman = Moveable([sprite], (0, 0), (0, 1), 1.08)
+        
+        sprite = Sprite(sprites, pygame.Rect(10 * 16, 3 * 16, 16, 16)).scale(self.scale)
+        self.dot = GameObject([sprite], (0, 0))
+
+        sprite = Sprite(sprites, pygame.Rect(10 * 16, 3 * 16, 16, 16)).scale(self.scale)
+        self.dot1 = GameObject([sprite], (1, 0))
+
+        sprite = Sprite(sprites, pygame.Rect(10 * 16, 3 * 16, 16, 16)).scale(self.scale)
+        self.dot2 = GameObject([sprite], (0, 1))
+
+        sprite = Sprite(sprites, pygame.Rect(11 * 16, 3 * 16, 16, 16)).scale(self.scale)
+        self.bonus = GameObject([sprite], (0, 2))
+
+        #!
+
 
 
 
@@ -49,7 +63,13 @@ class PacmanGame:
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.background, (0, 0))
         
+        #! Test objects
         self.render_object(self.pacman)
+        self.render_object(self.dot)
+        self.render_object(self.dot1)
+        self.render_object(self.dot2)
+        self.render_object(self.bonus)
+        #!
 
     def update(self):
         pygame.display.update()
