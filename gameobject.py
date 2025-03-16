@@ -17,8 +17,8 @@ class GameObject:
         pass
 
     def rotate(self, direction : tuple[int, int]):
-        pass
+        self.direction = direction
 
     def change_sprite(self, id : int):
-        pass
+        self.current = id
 
