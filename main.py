@@ -1,16 +1,10 @@
 import pygame
 import sys
-from gameobject import GameObject
-from sprite import Sprite
+# from arena import *
+# from pacman import *
 from pygame.locals import (KEYDOWN, K_RIGHT, K_d, K_LEFT, K_a, K_UP, K_w, K_DOWN, K_s, K_ESCAPE)
 
 class PacmanGame:
-
-    def sprites_init(self):
-        sprites = pygame.image.load('sprites/pacman_sprites.png')
-        self.pacman = Sprite(sprites, pygame.Rect(32, 0, 16, 16))
-
-
     def __init__(self, frame_rate, width, height):
         self.frame_rate = frame_rate
         self.width = width
@@ -21,26 +15,16 @@ class PacmanGame:
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.RESIZABLE | pygame.DOUBLEBUF)
         self.background = pygame.image.load('sprites/pacman_background.png')
         self.background = pygame.transform.scale(self.background, (self.width, self.height))
+        self.sprites = pygame.image.load('sprites/pacman_sprites.png')
 
         pygame.display.set_caption("Pacman")
-
-        self.sprites_init()
 
         self.playing = True
         self.game_over = False
 
-    def render_sprite(self, sprite: Sprite, scale : int):
-        hitbox = (8 * scale, (8+16) * scale, sprite.area.w * scale, sprite.area.h * scale)
-        
-        texture = pygame.transform.scale(sprite.texture, (sprite.texture.get_width() * scale, sprite.texture.get_height() * scale))
-        self.screen.blit(texture, hitbox, (sprite.area.x * scale, sprite.area.y * scale, 16 * scale, 16 * scale))
-
-
     def render(self):
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.background, (0, 0))
-        
-        self.render_sprite(self.pacman, 3)
 
     def update(self):
         pygame.display.update()
@@ -62,7 +46,7 @@ class PacmanGame:
 
 if __name__ == '__main__':
     pygame.init()
-    game = PacmanGame(30, 232*3, 256*3)
+    game = PacmanGame(30, 232*2, 256*2)
     
     while game.playing:
         game.proceed_event()
