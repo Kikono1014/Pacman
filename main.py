@@ -9,12 +9,13 @@ class PacmanGame:
     def sprites_init(self):
         sprites = pygame.image.load('sprites/pacman_sprites.png')
         self.pacman = Sprite(sprites, pygame.Rect(32, 0, 16, 16))
+        self.pacman.scale(self.scale)
 
 
-    def __init__(self, frame_rate, width, height):
+    def __init__(self, frame_rate, width, height, scale):
         self.frame_rate = frame_rate
-        self.width = width
-        self.height = height
+        self.width = width * scale
+        self.height = height * scale
 
         self.clock = pygame.time.Clock()
 
@@ -24,16 +25,19 @@ class PacmanGame:
 
         pygame.display.set_caption("Pacman")
 
+        self.scale = scale
+
         self.sprites_init()
 
         self.playing = True
         self.game_over = False
 
     def render_sprite(self, sprite: Sprite, scale : int):
-        hitbox = (8 * scale, (8+16) * scale, sprite.area.w * scale, sprite.area.h * scale)
+        hitbox = sprite.area.move(8 * scale, (8+16) * scale)
         
-        texture = pygame.transform.scale(sprite.texture, (sprite.texture.get_width() * scale, sprite.texture.get_height() * scale))
-        self.screen.blit(texture, hitbox, (sprite.area.x * scale, sprite.area.y * scale, 16 * scale, 16 * scale))
+        
+
+        self.screen.blit(sprite.texture, hitbox, sprite.area)
 
 
     def render(self):
@@ -53,16 +57,12 @@ class PacmanGame:
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE or e.key == pygame.K_q:
                     self.playing = False
-            if e.type == pygame.VIDEORESIZE:
-                self.width, self.height = e.w, e.h
-                self.screen = pygame.display.set_mode((self.width, self.height), pygame.RESIZABLE | pygame.DOUBLEBUF)
-                self.background = pygame.transform.scale(self.background, (self.width, self.height))
 
 
 
 if __name__ == '__main__':
     pygame.init()
-    game = PacmanGame(30, 232*3, 256*3)
+    game = PacmanGame(30, 232, 256, 3)
     
     while game.playing:
         game.proceed_event()
