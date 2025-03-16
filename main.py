@@ -3,29 +3,33 @@ import sys
 from sprite import Sprite
 from gameobject import GameObject
 from moveable import Moveable
+from arena import Arena
 
 class PacmanGame:
 
     def sprites_init(self):
-        sprites = pygame.image.load('sprites/pacman_sprites.png')
+        atlas = pygame.image.load('sprites/pacman_sprites.png')
 
-        #! Test objects
-        sprite = Sprite(sprites, pygame.Rect(32, 0, 16, 16)).scale(self.scale)
-        self.pacman = Moveable([sprite], (0, 0), (0, 1), 1.08)
+        dot_sprites = [
+            Sprite(atlas, pygame.Rect(10 * 16, 3 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(12 * 16, 3 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(11 * 16, 3 * 16, 16, 16)).scale(self.scale),
+        ]
+
+        for i in range(2, 10):
+            dot_sprites.append(
+                Sprite(atlas, pygame.Rect(i * 16, 3 * 16, 16, 16)).scale(self.scale)
+            )
+
+        self.sprites["dot_sprites"] = dot_sprites
         
-        sprite = Sprite(sprites, pygame.Rect(10 * 16, 3 * 16, 16, 16)).scale(self.scale)
-        self.dot = GameObject([sprite], (0, 0))
+        
+        self.sprites["pacman"] = [
+            Sprite(atlas, pygame.Rect(0 * 16, 0, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(1 * 16, 0, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(2 * 16, 0, 16, 16)).scale(self.scale)
+        ]
 
-        sprite = Sprite(sprites, pygame.Rect(10 * 16, 3 * 16, 16, 16)).scale(self.scale)
-        self.dot1 = GameObject([sprite], (1, 0))
-
-        sprite = Sprite(sprites, pygame.Rect(10 * 16, 3 * 16, 16, 16)).scale(self.scale)
-        self.dot2 = GameObject([sprite], (0, 1))
-
-        sprite = Sprite(sprites, pygame.Rect(11 * 16, 3 * 16, 16, 16)).scale(self.scale)
-        self.bonus = GameObject([sprite], (0, 2))
-
-        #!
 
 
 
@@ -41,10 +45,15 @@ class PacmanGame:
         pygame.display.set_caption("Pacman")
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
 
-        self.background = pygame.image.load('sprites/pacman_background.png')
-        self.background = pygame.transform.scale(self.background, (self.width, self.height))
-
+        self.sprites = {}
         self.sprites_init()
+
+        self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], 1)
+
+        #! Test objects
+        self.pacman = Moveable(self.sprites["pacman"], (0, 0), (0, 1), 1.08)
+        self.pacman.change_sprite(2)
+        #!
 
         self.playing = True
         self.game_over = False
@@ -52,16 +61,18 @@ class PacmanGame:
     def render_object(self, object: GameObject):
         self.screen.blit(object.get_sprite().texture, object.get_hitbox(), object.get_sprite().area)
 
+    def render_arena(self):
+        for y in range(len(self.arena.map)):
+            for x in range(len(self.arena.map[0])):
+                self.render_object(self.arena.objects[y][x])
 
     def render(self):
         self.screen.fill((0, 0, 0))
-        self.screen.blit(self.background, (0, 0))
+        self.screen.blit(self.arena.background.texture, (0, 0))
         
+        self.render_arena()
+
         #! Test objects
-        self.render_object(self.dot)
-        self.render_object(self.dot1)
-        self.render_object(self.dot2)
-        self.render_object(self.bonus)
         self.render_object(self.pacman)
         #!
 

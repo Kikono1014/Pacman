@@ -16,8 +16,8 @@ class GameObject:
         """Returns area where to draw object
         """
         return pygame.Rect(
-            (self.position[0] + 1) * self.get_sprite().area.w / 2,
-            (self.position[1] + 1) * self.get_sprite().area.w / 2,
+            self.position[0] * self.get_sprite().area.w / 2,
+            self.position[1] * self.get_sprite().area.w / 2,
             self.get_sprite().area.w,
             self.get_sprite().area.h)
     
