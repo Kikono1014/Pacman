@@ -4,6 +4,10 @@ import sys
 # from pacman import *
 from pygame.locals import (KEYDOWN, K_RIGHT, K_d, K_LEFT, K_a, K_UP, K_w, K_DOWN, K_s, K_ESCAPE)
 
+
+# arena = PacmanArena(SCREEN_W, SCREEN_H)
+# pacman = PacMan(arena, 108, 184)
+
 class PacmanGame:
     def __init__(self, frame_rate, width, height):
         self.frame_rate = frame_rate
