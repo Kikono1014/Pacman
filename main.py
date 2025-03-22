@@ -64,6 +64,7 @@ class PacmanGame:
 
         self.pacman = Moveable(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 1.08)
         self.pacman.change_sprite(2)
+        self.pacman.game = self
 
         self.ghosts = [
             Ghost(self.sprites["blinky"], self.arena.ghost_start, (0, 1), 1.0, self.arena, self.pacman, name="Blinky"),
@@ -71,6 +72,9 @@ class PacmanGame:
             Ghost(self.sprites["inky"], self.arena.ghost_start, (-1, 0), 0.8, self.arena, self.pacman, name="Inky"),
             Ghost(self.sprites["clyde"], self.arena.ghost_start, (1, 0), 0.7, self.arena, self.pacman, name="Clyde"),
         ]
+        for ghost in self.ghosts:
+            ghost.game = self
+            ghost.mode = "chase"
 
         self.playing = True
         self.game_over = False
