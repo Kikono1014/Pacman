@@ -29,6 +29,11 @@ class Ghost(Moveable):
             return self.arena.map[y][x] != Dot.WALL
         return False
 
+    def check_collision(self, pacman):
+        pacman_hitbox = pacman.get_hitbox()
+        ghost_hitbox = self.get_hitbox()
+        return pacman_hitbox.colliderect(ghost_hitbox)
+
     def update_destination(self):
         if self.mode == "chase":
             if self.name == "Blinky":
@@ -94,3 +99,11 @@ class Ghost(Moveable):
             self.rotate(best_direction)
             if self.can_move(self.direction):
                 super().move()
+
+        if self.check_collision(self.pacman):
+            if self.mode == "frightened":
+                self.position = self.arena.ghost_start
+                self.mode = "scatter"
+                self.change_sprite(0)
+            else:
+                self.pacman.position = self.arena.pacman_start
