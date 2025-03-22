@@ -4,6 +4,7 @@ from sprite import Sprite
 from gameobject import GameObject
 from moveable import Moveable
 from arena import Arena
+from arena import Dot
 from ghost import Ghost
 
 class PacmanGame:
@@ -30,20 +31,20 @@ class PacmanGame:
         ]
 
         self.sprites["blinky"] = [
-            Sprite(atlas, pygame.Rect(0 * 16, 2 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(4 * 16, 2 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(0, 4 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
         ]
         self.sprites["pinky"] = [
-            Sprite(atlas, pygame.Rect(1 * 16, 2 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(4 * 16, 2 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(0, 5 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
         ]
         self.sprites["inky"] = [
-            Sprite(atlas, pygame.Rect(2 * 16, 2 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(4 * 16, 2 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(0, 6 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
         ]
         self.sprites["clyde"] = [
-            Sprite(atlas, pygame.Rect(3 * 16, 2 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(4 * 16, 2 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(0, 7 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
         ]
 
     def __init__(self, frame_rate, width, height, scale, preset):
