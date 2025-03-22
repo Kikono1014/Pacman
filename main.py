@@ -42,7 +42,8 @@ class PacmanGame:
 
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
-        self.pacman = Moveable(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 1.08)
+        #! Test objects
+        self.pacman = Moveable(self.sprites["pacman"], (0, 0), (0, 1), 1.08)
         self.pacman.change_sprite(2)
         self.pacman.game = self
 
@@ -77,7 +78,11 @@ class PacmanGame:
                 self.render_object(ghost)
 
     def update(self):
+        #! Test objects
+        prev_position = self.pacman.position
         self.pacman.move()
+        if self.arena.map[self.pacman.position[1]][self.pacman.position[0]] == Dot.WALL:
+            self.pacman.position = prev_position
         for ghost in self.ghosts:
             ghost.move()
 
@@ -90,6 +95,7 @@ class PacmanGame:
                     ghost.set_frightened()
 
         pygame.display.update()
+        #!
         self.clock.tick(self.frame_rate)
 
     def proceed_event(self):

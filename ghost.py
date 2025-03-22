@@ -2,6 +2,7 @@ import pygame
 from moveable import Moveable
 from sprite import Sprite
 from arena import Dot
+import random
 
 class Ghost(Moveable):
     def __init__(self, sprites: list[Sprite], position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman):
