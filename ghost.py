@@ -55,10 +55,12 @@ class Ghost(Moveable):
                     self.destination = self.pacman.position
                 else:
                     self.destination = self.scatter_point
+        elif self.mode == "scatter":
+            self.destination = self.scatter_point
 
     def move(self):
         self.update_destination()
-        if self.mode == "chase":
+        if self.mode in ["chase", "scatter"]:
             directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
             best_direction = self.direction
             min_distance = float("inf")
@@ -74,14 +76,3 @@ class Ghost(Moveable):
             self.rotate(best_direction)
             if self.can_move(self.direction):
                 super().move()
-        else:
-            if self.can_move(self.direction):
-                super().move()
-            else:
-                directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-                random.shuffle(directions)
-                for direction in directions:
-                    if self.can_move(direction):
-                        self.rotate(direction)
-                        super().move()
-                        break
