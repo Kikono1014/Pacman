@@ -1,8 +1,8 @@
-import pygame
 import random
 from moveable import Moveable
 from sprite import Sprite
 from arena import Dot
+from ghostStrategies import BlinkyChaseStrategy, PinkyChaseStrategy, InkyChaseStrategy, ClydeChaseStrategy
 
 class Ghost(Moveable):
     def __init__(self, sprites: list[Sprite], position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman, name: str):
@@ -27,6 +27,15 @@ class Ghost(Moveable):
         self.mode_timer = 0
         self.mode_duration = 600  # 10 секунд при 60 FPS
 
+        # Ініціалізація стратегій переслідування
+        self.chase_strategies = {
+            "Blinky": BlinkyChaseStrategy(),
+            "Pinky": PinkyChaseStrategy(),
+            "Inky": InkyChaseStrategy(),
+            "Clyde": ClydeChaseStrategy()
+        }
+        self.chase_strategy = self.chase_strategies[name]
+
     def can_move(self, direction: tuple[int, int]) -> bool:
         next_pos = tuple(map(sum, zip(self.position, direction)))
         x, y = int(next_pos[0]), int(next_pos[1])
@@ -46,40 +55,17 @@ class Ghost(Moveable):
         ghost_hitbox = self.get_hitbox()
         return pacman_hitbox.colliderect(ghost_hitbox)
 
-    def update_destination(self):
-        if self.mode == "chase":
-            if self.name == "Blinky":
-                self.destination = self.pacman.position
-            elif self.name == "Pinky":
-                pacman_dir = self.pacman.direction
-                self.destination = (
-                    self.pacman.position[0] + pacman_dir[0] * 4,
-                    self.pacman.position[1] + pacman_dir[1] * 4
-                )
-            elif self.name == "Inky":
-                blinky = next(g for g in self.game.ghosts if g.name == "Blinky")
-                pacman_dir = self.pacman.direction
-                intermediate = (
-                    self.pacman.position[0] + pacman_dir[0] * 2,
-                    self.pacman.position[1] + pacman_dir[1] * 2
-                )
-                self.destination = (
-                    intermediate[0] + (intermediate[0] - blinky.position[0]),
-                    intermediate[1] + (intermediate[1] - blinky.position[1])
-                )
-            elif self.name == "Clyde":
-                distance = ((self.position[0] - self.pacman.position[0]) ** 2 + (self.position[1] - self.pacman.position[1]) ** 2) ** 0.5
-                if distance > 8:
-                    self.destination = self.pacman.position
-                else:
-                    self.destination = self.scatter_point
-        elif self.mode == "scatter":
-            self.destination = self.scatter_point
-
     def set_frightened(self):
         self.mode = "frightened"
         self.frightened_timer = 60
         self.change_sprite(1)
+
+    def update_destination(self):
+        if self.mode == "chase":
+            self.chase_strategy.update_destination(self)
+        elif self.mode == "scatter":
+            self.destination = self.scatter_point
+        # У режимі "frightened" ціль не оновлюється
 
     def move(self):
         if not self.is_active:
@@ -91,7 +77,7 @@ class Ghost(Moveable):
             return
 
         # Оновлення таймера режимів
-        if self.mode not in ["frightened"]:
+        if self.mode != "frightened":
             self.mode_timer += 1
             if self.mode_timer >= self.mode_duration:
                 self.mode_timer = 0
@@ -120,7 +106,8 @@ class Ghost(Moveable):
             for direction in directions:
                 if self.can_move(direction):
                     next_pos = tuple(map(sum, zip(self.position, direction)))
-                    distance = ((next_pos[0] - self.destination[0]) ** 2 + (next_pos[1] - self.destination[1]) ** 2) ** 0.5
+                    distance = ((next_pos[0] - self.destination[0]) ** 2 + 
+                                (next_pos[1] - self.destination[1]) ** 2) ** 0.5
                     if distance < min_distance:
                         min_distance = distance
                         best_direction = direction
