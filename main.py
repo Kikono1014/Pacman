@@ -74,7 +74,7 @@ class PacmanGame:
         ]
         for ghost in self.ghosts:
             ghost.game = self
-            ghost.mode = "chase"
+            ghost.mode = "scatter"
 
         self.playing = True
         self.game_over = False

@@ -24,6 +24,8 @@ class Ghost(Moveable):
         self.base_speed = speed
         self.respawn_timer = 0
         self.is_active = True
+        self.mode_timer = 0
+        self.mode_duration = 600  # 10 секунд при 60 FPS
 
     def can_move(self, direction: tuple[int, int]) -> bool:
         next_pos = tuple(map(sum, zip(self.position, direction)))
@@ -87,6 +89,13 @@ class Ghost(Moveable):
                 self.mode = "scatter"
                 self.change_sprite(0)
             return
+
+        # Оновлення таймера режимів
+        if self.mode not in ["frightened"]:
+            self.mode_timer += 1
+            if self.mode_timer >= self.mode_duration:
+                self.mode_timer = 0
+                self.mode = "chase" if self.mode == "scatter" else "scatter"
 
         self.update_destination()
         if self.mode == "frightened":
