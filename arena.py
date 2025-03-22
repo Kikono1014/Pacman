@@ -48,3 +48,18 @@ class Arena:
                 y = int(values[1])
                 self.map[y][x] = Dot.PELLET
                 self.objects[y][x].change_sprite(2)
+        
+        with open(f'./data/arena{self.preset}/pacman_start.txt', 'r') as file:
+            for line in file.readlines():
+                values = line.split(" ")
+                x = int(values[0])
+                y = int(values[1])
+                self.pacman_start = (x, y)
+        
+        with open(f'./data/arena{self.preset}/ghost_start.txt', 'r') as file:
+            for line in file.readlines():
+                values = line.split(" ")
+                x = int(values[0])
+                y = int(values[1])
+                self.ghost_start = (x, y)
+

@@ -29,7 +29,7 @@ class Moveable(GameObject):
 
     
     def get_hitbox(self):
-        # self.get_sprite().area.w / 2 is offset
+        # self.get_sprite().area.w / 2 is a size of a cell
         return pygame.Rect(
             self.position[0] * self.get_sprite().area.w / 2,
             self.position[1] * self.get_sprite().area.h / 2,
