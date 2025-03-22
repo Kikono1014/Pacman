@@ -21,6 +21,7 @@ class Ghost(Moveable):
         }
         self.scatter_point = self.scatter_points[name]
         self.frightened_timer = 0
+        self.base_speed = speed  # Зберігаємо початкову швидкість
 
     def can_move(self, direction: tuple[int, int]) -> bool:
         next_pos = tuple(map(sum, zip(self.position, direction)))
@@ -72,9 +73,11 @@ class Ghost(Moveable):
     def move(self):
         self.update_destination()
         if self.mode == "frightened":
+            self.speed = self.base_speed * 0.5  # Зменшуємо швидкість удвічі
             self.frightened_timer -= 1
             if self.frightened_timer <= 0:
                 self.mode = "scatter"
+                self.speed = self.base_speed  # Повертаємо початкову швидкість
                 self.change_sprite(0)
             directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
             random.shuffle(directions)
@@ -84,6 +87,7 @@ class Ghost(Moveable):
                     super().move()
                     break
         else:
+            self.speed = self.base_speed  # Використовуємо початкову швидкість у звичайних режимах
             directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
             best_direction = self.direction
             min_distance = float("inf")
