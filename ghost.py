@@ -21,7 +21,9 @@ class Ghost(Moveable):
         }
         self.scatter_point = self.scatter_points[name]
         self.frightened_timer = 0
-        self.base_speed = speed  # Зберігаємо початкову швидкість
+        self.base_speed = speed
+        self.respawn_timer = 0
+        self.is_active = True
 
     def can_move(self, direction: tuple[int, int]) -> bool:
         next_pos = tuple(map(sum, zip(self.position, direction)))
@@ -71,13 +73,20 @@ class Ghost(Moveable):
         self.change_sprite(1)
 
     def move(self):
+        if not self.is_active:
+            self.respawn_timer -= 1
+            if self.respawn_timer <= 0:
+                self.is_active = True
+                self.mode = "scatter"
+                self.change_sprite(0)
+            return
+
         self.update_destination()
         if self.mode == "frightened":
-            self.speed = self.base_speed * 0.5  # Зменшуємо швидкість удвічі
+            self.speed = self.base_speed * 0.5
             self.frightened_timer -= 1
             if self.frightened_timer <= 0:
                 self.mode = "scatter"
-                self.speed = self.base_speed  # Повертаємо початкову швидкість
                 self.change_sprite(0)
             directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
             random.shuffle(directions)
@@ -87,7 +96,7 @@ class Ghost(Moveable):
                     super().move()
                     break
         else:
-            self.speed = self.base_speed  # Використовуємо початкову швидкість у звичайних режимах
+            self.speed = self.base_speed
             directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
             best_direction = self.direction
             min_distance = float("inf")
@@ -107,7 +116,8 @@ class Ghost(Moveable):
         if self.check_collision(self.pacman):
             if self.mode == "frightened":
                 self.position = self.arena.ghost_start
-                self.mode = "scatter"
+                self.is_active = False
+                self.respawn_timer = 120  # 2 секунди при 60 FPS
                 self.change_sprite(0)
             else:
                 self.pacman.position = self.arena.pacman_start

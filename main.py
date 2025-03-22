@@ -94,7 +94,8 @@ class PacmanGame:
         self.render_arena()
         self.render_object(self.pacman)
         for ghost in self.ghosts:
-            self.render_object(ghost)
+            if ghost.is_active:
+                self.render_object(ghost)
 
     def update(self):
         self.pacman.move()
