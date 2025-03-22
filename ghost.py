@@ -29,7 +29,14 @@ class Ghost(Moveable):
         next_pos = tuple(map(sum, zip(self.position, direction)))
         x, y = int(next_pos[0]), int(next_pos[1])
         if 0 <= y < len(self.arena.map) and 0 <= x < len(self.arena.map[0]):
-            return self.arena.map[y][x] != Dot.WALL
+            if self.arena.map[y][x] == Dot.WALL:
+                return False
+            for other_ghost in self.game.ghosts:
+                if other_ghost != self and other_ghost.is_active:
+                    other_x, other_y = int(other_ghost.position[0]), int(other_ghost.position[1])
+                    if other_x == x and other_y == y:
+                        return False
+            return True
         return False
 
     def check_collision(self, pacman):
@@ -117,7 +124,7 @@ class Ghost(Moveable):
             if self.mode == "frightened":
                 self.position = self.arena.ghost_start
                 self.is_active = False
-                self.respawn_timer = 120  # 2 секунди при 60 FPS
+                self.respawn_timer = 120
                 self.change_sprite(0)
             else:
                 self.pacman.position = self.arena.pacman_start
