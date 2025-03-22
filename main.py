@@ -4,6 +4,7 @@ from sprite import Sprite
 from gameobject import GameObject
 from moveable import Moveable
 from arena import Arena
+from arena import Dot
 
 
 # arena = PacmanArena(SCREEN_W, SCREEN_H)
@@ -79,9 +80,14 @@ class PacmanGame:
         #!
 
     def update(self):
+        #! Test objects
+        prev_position = self.pacman.position
         self.pacman.move()
+        if self.arena.map[self.pacman.position[1]][self.pacman.position[0]] == Dot.WALL:
+            self.pacman.position = prev_position
 
         pygame.display.update()
+        #!
 
         self.clock.tick(self.frame_rate)
 
