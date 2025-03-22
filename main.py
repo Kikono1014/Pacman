@@ -101,6 +101,14 @@ class PacmanGame:
         for ghost in self.ghosts:
             ghost.move()
 
+        pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
+        if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
+            if self.arena.map[pacman_pos[1]][pacman_pos[0]] == Dot.PELLET:
+                self.arena.map[pacman_pos[1]][pacman_pos[0]] = Dot.EMPTY
+                self.arena.objects[pacman_pos[1]][pacman_pos[0]].change_sprite(0)
+                for ghost in self.ghosts:
+                    ghost.set_frightened()
+
         pygame.display.update()
         self.clock.tick(self.frame_rate)
 

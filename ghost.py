@@ -20,6 +20,7 @@ class Ghost(Moveable):
             "Clyde": (0, len(self.arena.map) - 1),
         }
         self.scatter_point = self.scatter_points[name]
+        self.frightened_timer = 0
 
     def can_move(self, direction: tuple[int, int]) -> bool:
         next_pos = tuple(map(sum, zip(self.position, direction)))
@@ -58,9 +59,26 @@ class Ghost(Moveable):
         elif self.mode == "scatter":
             self.destination = self.scatter_point
 
+    def set_frightened(self):
+        self.mode = "frightened"
+        self.frightened_timer = 60
+        self.change_sprite(1)
+
     def move(self):
         self.update_destination()
-        if self.mode in ["chase", "scatter"]:
+        if self.mode == "frightened":
+            self.frightened_timer -= 1
+            if self.frightened_timer <= 0:
+                self.mode = "scatter"
+                self.change_sprite(0)
+            directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+            random.shuffle(directions)
+            for direction in directions:
+                if self.can_move(direction):
+                    self.rotate(direction)
+                    super().move()
+                    break
+        else:
             directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
             best_direction = self.direction
             min_distance = float("inf")
