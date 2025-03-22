@@ -5,46 +5,26 @@ from gameobject import GameObject
 from moveable import Moveable
 from arena import Arena
 from arena import Dot
-from ghost import Ghost
+from ghosts import Blinky, Pinky, Inky, Clyde  # Оновлений імпорт
 
 class PacmanGame:
     def sprites_init(self):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
-
         dot_sprites = [
             Sprite(atlas, pygame.Rect(10 * 16, 3 * 16, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(12 * 16, 3 * 16, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(11 * 16, 3 * 16, 16, 16)).scale(self.scale),
         ]
-
         for i in range(2, 10):
             dot_sprites.append(
                 Sprite(atlas, pygame.Rect(i * 16, 3 * 16, 16, 16)).scale(self.scale)
             )
-
         self.sprites["dot_sprites"] = dot_sprites
         
         self.sprites["pacman"] = [
             Sprite(atlas, pygame.Rect(0 * 16, 0, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(1 * 16, 0, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(2 * 16, 0, 16, 16)).scale(self.scale)
-        ]
-
-        self.sprites["blinky"] = [
-            Sprite(atlas, pygame.Rect(0, 4 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
-        ]
-        self.sprites["pinky"] = [
-            Sprite(atlas, pygame.Rect(0, 5 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
-        ]
-        self.sprites["inky"] = [
-            Sprite(atlas, pygame.Rect(0, 6 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
-        ]
-        self.sprites["clyde"] = [
-            Sprite(atlas, pygame.Rect(0, 7 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
         ]
 
     def __init__(self, frame_rate, width, height, scale, preset):
@@ -54,7 +34,6 @@ class PacmanGame:
         self.height = height * self.scale
 
         self.clock = pygame.time.Clock()
-
         pygame.display.set_caption("Pacman")
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
 
@@ -68,10 +47,10 @@ class PacmanGame:
         self.pacman.game = self
 
         self.ghosts = [
-            Ghost(self.sprites["blinky"], self.arena.ghost_start, (0, 1), 1.0, self.arena, self.pacman, name="Blinky"),
-            Ghost(self.sprites["pinky"], self.arena.ghost_start, (0, -1), 0.9, self.arena, self.pacman, name="Pinky"),
-            Ghost(self.sprites["inky"], self.arena.ghost_start, (-1, 0), 0.8, self.arena, self.pacman, name="Inky"),
-            Ghost(self.sprites["clyde"], self.arena.ghost_start, (1, 0), 0.7, self.arena, self.pacman, name="Clyde"),
+            Blinky(self.arena.ghost_start, (0, 1), 1.0, self.arena, self.pacman, self.scale),
+            Pinky(self.arena.ghost_start, (0, -1), 0.9, self.arena, self.pacman, self.scale),
+            Inky(self.arena.ghost_start, (-1, 0), 0.8, self.arena, self.pacman, self.scale),
+            Clyde(self.arena.ghost_start, (1, 0), 0.7, self.arena, self.pacman, self.scale),
         ]
         for ghost in self.ghosts:
             ghost.game = self
@@ -91,7 +70,6 @@ class PacmanGame:
     def render(self):
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.arena.background.texture, (0, 0))
-        
         self.render_arena()
         self.render_object(self.pacman)
         for ghost in self.ghosts:
@@ -132,21 +110,16 @@ class PacmanGame:
 
 if __name__ == '__main__':
     pygame.init()
-
     preset = 1
     scale = 2
-
     if len(sys.argv) >= 2:
         preset = int(sys.argv[1])
     if len(sys.argv) >= 3:
         scale = int(sys.argv[2])
-
     game = PacmanGame(10, 232, 256, scale, preset)
-    
     while game.playing:
         game.proceed_event()
         game.render()
         game.update()
-
     pygame.quit()
     sys.exit()

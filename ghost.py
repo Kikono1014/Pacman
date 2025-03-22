@@ -1,40 +1,22 @@
-import random
+import pygame
 from moveable import Moveable
 from sprite import Sprite
 from arena import Dot
-from ghostStrategies import BlinkyChaseStrategy, PinkyChaseStrategy, InkyChaseStrategy, ClydeChaseStrategy
 
 class Ghost(Moveable):
-    def __init__(self, sprites: list[Sprite], position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman, name: str):
+    def __init__(self, sprites: list[Sprite], position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman):
         super().__init__(sprites, position, direction, speed)
         self.destination: tuple[int, int] = position
         self.arena = arena
         self.pacman = pacman
         self.game = pacman.game
-        self.name = name
         self.mode = "scatter"
-        self.scatter_points = {
-            "Blinky": (len(self.arena.map[0]) - 1, 0),
-            "Pinky": (0, 0),
-            "Inky": (len(self.arena.map[0]) - 1, len(self.arena.map) - 1),
-            "Clyde": (0, len(self.arena.map) - 1),
-        }
-        self.scatter_point = self.scatter_points[name]
         self.frightened_timer = 0
         self.base_speed = speed
         self.respawn_timer = 0
         self.is_active = True
         self.mode_timer = 0
         self.mode_duration = 600  # 10 секунд при 60 FPS
-
-        # Ініціалізація стратегій переслідування
-        self.chase_strategies = {
-            "Blinky": BlinkyChaseStrategy(),
-            "Pinky": PinkyChaseStrategy(),
-            "Inky": InkyChaseStrategy(),
-            "Clyde": ClydeChaseStrategy()
-        }
-        self.chase_strategy = self.chase_strategies[name]
 
     def can_move(self, direction: tuple[int, int]) -> bool:
         next_pos = tuple(map(sum, zip(self.position, direction)))
@@ -61,11 +43,8 @@ class Ghost(Moveable):
         self.change_sprite(1)
 
     def update_destination(self):
-        if self.mode == "chase":
-            self.chase_strategy.update_destination(self)
-        elif self.mode == "scatter":
-            self.destination = self.scatter_point
-        # У режимі "frightened" ціль не оновлюється
+        # Цей метод буде перевизначений у дочірніх класах
+        pass
 
     def move(self):
         if not self.is_active:
@@ -76,7 +55,6 @@ class Ghost(Moveable):
                 self.change_sprite(0)
             return
 
-        # Оновлення таймера режимів
         if self.mode != "frightened":
             self.mode_timer += 1
             if self.mode_timer >= self.mode_duration:
