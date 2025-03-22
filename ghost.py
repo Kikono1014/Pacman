@@ -1,4 +1,5 @@
 import pygame
+import random
 from moveable import Moveable
 from sprite import Sprite
 from arena import Dot
@@ -19,5 +20,24 @@ class Ghost(Moveable):
         }
         self.scatter_point = self.scatter_points[name]
 
+    def can_move(self, direction: tuple[int, int]) -> bool:
+        next_pos = tuple(map(sum, zip(self.position, direction)))
+        x, y = int(next_pos[0]), int(next_pos[1])
+        if 0 <= y < len(self.arena.map) and 0 <= x < len(self.arena.map[0]):
+            return self.arena.map[y][x] != Dot.WALL
+        return False
+
     def update_destination(self):
         pass
+
+    def move(self):
+        if self.can_move(self.direction):
+            super().move()
+        else:
+            directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+            random.shuffle(directions)
+            for direction in directions:
+                if self.can_move(direction):
+                    self.rotate(direction)
+                    super().move()
+                    break
