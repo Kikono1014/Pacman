@@ -4,10 +4,13 @@ from sprite import Sprite
 from gameobject import GameObject
 from moveable import Moveable
 from arena import Arena
-from arena import Dot
-from ghost import Ghost
+
+
+# arena = PacmanArena(SCREEN_W, SCREEN_H)
+# pacman = PacMan(arena, 108, 184)
 
 class PacmanGame:
+
     def sprites_init(self):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
 
@@ -24,28 +27,14 @@ class PacmanGame:
 
         self.sprites["dot_sprites"] = dot_sprites
         
+        
         self.sprites["pacman"] = [
             Sprite(atlas, pygame.Rect(0 * 16, 0, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(1 * 16, 0, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(2 * 16, 0, 16, 16)).scale(self.scale)
         ]
 
-        self.sprites["blinky"] = [
-            Sprite(atlas, pygame.Rect(0, 4 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
-        ]
-        self.sprites["pinky"] = [
-            Sprite(atlas, pygame.Rect(0, 5 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
-        ]
-        self.sprites["inky"] = [
-            Sprite(atlas, pygame.Rect(0, 6 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
-        ]
-        self.sprites["clyde"] = [
-            Sprite(atlas, pygame.Rect(0, 7 * 16, 16, 16)).scale(self.scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(self.scale),
-        ]
+
 
     def __init__(self, frame_rate, width, height, scale, preset):
         self.frame_rate = frame_rate
@@ -63,19 +52,10 @@ class PacmanGame:
 
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
-        self.pacman = Moveable(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 1.08)
+        #! Test objects
+        self.pacman = Moveable(self.sprites["pacman"], (0, 0), (0, 1), 1.08)
         self.pacman.change_sprite(2)
-        self.pacman.game = self
-
-        self.ghosts = [
-            Ghost(self.sprites["blinky"], self.arena.ghost_start, (0, 1), 1.0, self.arena, self.pacman, name="Blinky"),
-            Ghost(self.sprites["pinky"], self.arena.ghost_start, (0, -1), 0.9, self.arena, self.pacman, name="Pinky"),
-            Ghost(self.sprites["inky"], self.arena.ghost_start, (-1, 0), 0.8, self.arena, self.pacman, name="Inky"),
-            Ghost(self.sprites["clyde"], self.arena.ghost_start, (1, 0), 0.7, self.arena, self.pacman, name="Clyde"),
-        ]
-        for ghost in self.ghosts:
-            ghost.game = self
-            ghost.mode = "scatter"
+        #!
 
         self.playing = True
         self.game_over = False
@@ -93,25 +73,16 @@ class PacmanGame:
         self.screen.blit(self.arena.background.texture, (0, 0))
         
         self.render_arena()
+
+        #! Test objects
         self.render_object(self.pacman)
-        for ghost in self.ghosts:
-            if ghost.is_active:
-                self.render_object(ghost)
+        #!
 
     def update(self):
         self.pacman.move()
-        for ghost in self.ghosts:
-            ghost.move()
-
-        pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
-        if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
-            if self.arena.map[pacman_pos[1]][pacman_pos[0]] == Dot.PELLET:
-                self.arena.map[pacman_pos[1]][pacman_pos[0]] = Dot.EMPTY
-                self.arena.objects[pacman_pos[1]][pacman_pos[0]].change_sprite(0)
-                for ghost in self.ghosts:
-                    ghost.set_frightened()
 
         pygame.display.update()
+
         self.clock.tick(self.frame_rate)
 
     def proceed_event(self):
@@ -130,6 +101,8 @@ class PacmanGame:
                 if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
                     self.pacman.rotate((1, 0))
 
+
+
 if __name__ == '__main__':
     pygame.init()
 
@@ -145,7 +118,7 @@ if __name__ == '__main__':
     
     while game.playing:
         game.proceed_event()
-        game.render()
+        game.render();
         game.update()
 
     pygame.quit()
