@@ -5,10 +5,30 @@ import pygame
 class Blinky(Ghost):
     def __init__(self, position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman, scale: float):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
+        row = 4 * 16
         sprites = [
-            Sprite(atlas, pygame.Rect(0, 4 * 16, 16, 16)).scale(scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
+            # right
+            [Sprite(atlas, pygame.Rect(0,      row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(1 * 16, row, 16, 16)).scale(scale)],
+            # left
+            [Sprite(atlas, pygame.Rect(2 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(3 * 16, row, 16, 16)).scale(scale)],
+            # up
+            [Sprite(atlas, pygame.Rect(4 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(5 * 16, row, 16, 16)).scale(scale)],
+            # down
+            [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
+            
+            # Scared
+            [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
         ]
+
+
+
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (len(self.arena.map[0]) - 1, 0)
 
@@ -22,9 +42,26 @@ class Blinky(Ghost):
 class Pinky(Ghost):
     def __init__(self, position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman, scale: float):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
+        row = 5 * 16
         sprites = [
-            Sprite(atlas, pygame.Rect(0, 5 * 16, 16, 16)).scale(scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
+            # right
+            [Sprite(atlas, pygame.Rect(0,      row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(1 * 16, row, 16, 16)).scale(scale)],
+            # left
+            [Sprite(atlas, pygame.Rect(2 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(3 * 16, row, 16, 16)).scale(scale)],
+            # up
+            [Sprite(atlas, pygame.Rect(4 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(5 * 16, row, 16, 16)).scale(scale)],
+            # down
+            [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
+            
+            # Scared
+            [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (0, 0)
@@ -43,9 +80,26 @@ class Pinky(Ghost):
 class Inky(Ghost):
     def __init__(self, position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman, scale: float):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
+        row = 6 * 16
         sprites = [
-            Sprite(atlas, pygame.Rect(0, 6 * 16, 16, 16)).scale(scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
+            # right
+            [Sprite(atlas, pygame.Rect(0,      row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(1 * 16, row, 16, 16)).scale(scale)],
+            # left
+            [Sprite(atlas, pygame.Rect(2 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(3 * 16, row, 16, 16)).scale(scale)],
+            # up
+            [Sprite(atlas, pygame.Rect(4 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(5 * 16, row, 16, 16)).scale(scale)],
+            # down
+            [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
+            
+            # Scared
+            [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (len(self.arena.map[0]) - 1, len(self.arena.map) - 1)
@@ -69,9 +123,26 @@ class Inky(Ghost):
 class Clyde(Ghost):
     def __init__(self, position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman, scale: float):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
+        row = 7 * 16
         sprites = [
-            Sprite(atlas, pygame.Rect(0, 7 * 16, 16, 16)).scale(scale),
-            Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
+            # right
+            [Sprite(atlas, pygame.Rect(0,      row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(1 * 16, row, 16, 16)).scale(scale)],
+            # left
+            [Sprite(atlas, pygame.Rect(2 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(3 * 16, row, 16, 16)).scale(scale)],
+            # up
+            [Sprite(atlas, pygame.Rect(4 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(5 * 16, row, 16, 16)).scale(scale)],
+            # down
+            [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
+            
+            # Scared
+            [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (0, len(self.arena.map) - 1)

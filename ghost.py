@@ -5,8 +5,8 @@ from arena import Dot
 import random
 
 class Ghost(Moveable):
-    def __init__(self, sprites: list[Sprite], position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman):
-        super().__init__(sprites, position, direction, speed)
+    def __init__(self, sprites: list[list[Sprite]], position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman):
+        super().__init__(sprites[0], position, direction, speed)
         self.destination: tuple[int, int] = position
         self.arena = arena
         self.pacman = pacman
@@ -18,6 +18,31 @@ class Ghost(Moveable):
         self.is_active = True
         self.mode_timer = 0
         self.mode_duration = 600  # 10 секунд при 60 FPS
+
+        self.sprites = sprites
+
+
+    def get_sprite(self):
+        #TODO fix modes
+        if (self.mode == "scatter"):
+            directionID = None
+            if (self.direction[0] == 1 and self.direction[1] == 0):
+                directionID = 0
+            if (self.direction[0] == -1 and self.direction[1] == 0):
+                directionID = 1
+            if (self.direction[0] == 0 and self.direction[1] == -1):
+                directionID = 2
+            if (self.direction[0] == 0 and self.direction[1] == 1):
+                directionID = 3
+            
+            self.current = (self.current + 1) % 2
+
+            return self.sprites[directionID][self.current]
+        elif (self.mode == "frightened"):
+            self.current = (self.current + 1) % 4
+            return self.sprites[4][self.current]
+
+
 
     def can_move(self, direction: tuple[int, int]) -> bool:
         next_pos = tuple(map(sum, zip(self.position, direction)))
@@ -53,7 +78,6 @@ class Ghost(Moveable):
             if self.respawn_timer <= 0:
                 self.is_active = True
                 self.mode = "scatter"
-                self.change_sprite(0)
             return
 
         if self.mode != "frightened":
@@ -68,7 +92,6 @@ class Ghost(Moveable):
             self.frightened_timer -= 1
             if self.frightened_timer <= 0:
                 self.mode = "scatter"
-                self.change_sprite(0)
             directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
             random.shuffle(directions)
             for direction in directions:
@@ -100,6 +123,5 @@ class Ghost(Moveable):
                 self.position = self.arena.ghost_start
                 self.is_active = False
                 self.respawn_timer = 120
-                self.change_sprite(0)
             else:
                 self.pacman.position = self.arena.pacman_start

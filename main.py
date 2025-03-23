@@ -61,7 +61,8 @@ class PacmanGame:
         self.game_over = False
 
     def render_object(self, object: GameObject):
-        self.screen.blit(object.get_sprite().texture, object.get_hitbox(), object.get_sprite().area)
+        sprite = object.get_sprite()
+        self.screen.blit(sprite.texture, object.get_hitbox(), sprite.area)
 
     def render_arena(self):
         for y in range(len(self.arena.map)):
@@ -81,8 +82,10 @@ class PacmanGame:
         #! Test objects
         prev_position = self.pacman.position
         self.pacman.move()
+
         if self.arena.map[self.pacman.position[1]][self.pacman.position[0]] == Dot.WALL:
             self.pacman.position = prev_position
+
         for ghost in self.ghosts:
             ghost.move()
 
