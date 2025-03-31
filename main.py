@@ -1,4 +1,4 @@
-import pygame
+﻿import pygame
 import sys
 from sprite import Sprite
 from gameobject import GameObject
@@ -8,6 +8,7 @@ from arena import Dot
 from ghosts import Blinky, Pinky, Inky, Clyde  # Оновлений імпорт
 
 class PacmanGame:
+
     def sprites_init(self):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
         dot_sprites = [
@@ -21,11 +22,14 @@ class PacmanGame:
             )
         self.sprites["dot_sprites"] = dot_sprites
         
+        
         self.sprites["pacman"] = [
             Sprite(atlas, pygame.Rect(0 * 16, 0, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(1 * 16, 0, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(2 * 16, 0, 16, 16)).scale(self.scale)
         ]
+
+
 
     def __init__(self, frame_rate, width, height, scale, preset):
         self.frame_rate = frame_rate
@@ -73,33 +77,20 @@ class PacmanGame:
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.arena.background.texture, (0, 0))
         self.render_arena()
+
         self.render_object(self.pacman)
-        for ghost in self.ghosts:
-            if ghost.is_active:
-                self.render_object(ghost)
 
     def update(self):
-        #! Test objects
-        prev_position = self.pacman.position
-        self.pacman.move()
+        prev_position = self.pacman.position  # Сохраняем предыдущую позицию
+        self.pacman.move(self.arena)  # Передаём арену в move()
 
         if self.arena.map[self.pacman.position[1]][self.pacman.position[0]] == Dot.WALL:
-            self.pacman.position = prev_position
-
-        for ghost in self.ghosts:
-            ghost.move()
-
-        pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
-        if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
-            if self.arena.map[pacman_pos[1]][pacman_pos[0]] == Dot.PELLET:
-                self.arena.map[pacman_pos[1]][pacman_pos[0]] = Dot.EMPTY
-                self.arena.objects[pacman_pos[1]][pacman_pos[0]].change_sprite(0)
-                for ghost in self.ghosts:
-                    ghost.set_frightened()
+            self.pacman.position = prev_position 
 
         pygame.display.update()
         #!
         self.clock.tick(self.frame_rate)
+
 
     def proceed_event(self):
         for e in pygame.event.get():
@@ -109,13 +100,15 @@ class PacmanGame:
                 if e.key == pygame.K_ESCAPE or e.key == pygame.K_q:
                     self.playing = False
                 if e.key == pygame.K_w or e.key == pygame.K_UP:
-                    self.pacman.rotate((0, -1))
+                    self.pacman.rotate((0, -1), self.arena)
                 if e.key == pygame.K_a or e.key == pygame.K_LEFT:
-                    self.pacman.rotate((-1, 0))
+                    self.pacman.rotate((-1, 0), self.arena)
                 if e.key == pygame.K_s or e.key == pygame.K_DOWN:
-                    self.pacman.rotate((0, 1))
+                    self.pacman.rotate((0, 1), self.arena)
                 if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
-                    self.pacman.rotate((1, 0))
+                    self.pacman.rotate((1, 0), self.arena)
+
+
 
 if __name__ == '__main__':
     pygame.init()
@@ -128,7 +121,7 @@ if __name__ == '__main__':
     game = PacmanGame(10, 232, 256, scale, preset)
     while game.playing:
         game.proceed_event()
-        game.render()
+        game.render();
         game.update()
     pygame.quit()
     sys.exit()
