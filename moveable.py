@@ -26,22 +26,28 @@ class Moveable(GameObject):
         next_position = (self.position[0] + self.direction[0], self.position[1] + self.direction[1])
 
         if arena.map[next_position[1]][next_position[0]] != Dot.WALL:
-            self.position = next_position  # Разрешаем движение
-
-        elif self.buffered_direction:  
-        # Если уперлись в стену, но есть буферное направление — пробуем его
-            buffered_next = (self.position[0] + self.buffered_direction[0], self.position[1] + self.buffered_direction[1])
-            if arena.map[buffered_next[1]][buffered_next[0]] != Dot.WALL:
-                self.direction = self.buffered_direction
-                self.position = buffered_next
+            self.position = next_position
+        else:
+            if self.buffered_direction:
+                buffered_next = (self.position[0] + self.buffered_direction[0], self.position[1] + self.buffered_direction[1])
+                if arena.map[buffered_next[1]][buffered_next[0]] != Dot.WALL:
+                    self.direction = self.buffered_direction  # Меняем направление
+                    self.position = buffered_next  
+                self.buffered_direction = None
 
     # Проверяем, съел ли Пакман монетку на новой позиции
         if arena.map[self.position[1]][self.position[0]] in [Dot.NORMAL, Dot.PELLET]:
             arena.map[self.position[1]][self.position[0]] = Dot.EMPTY
             arena.objects[self.position[1]][self.position[0]].change_sprite(1)
 
-    def rotate(self, new_direction):
-        self.buffered_direction = new_direction
+    def rotate(self, new_direction, arena):
+        next_position = (self.position[0] + new_direction[0], self.position[1] + new_direction[1])
+        if next_position and next_position[1] >= 0 and next_position[0] >= 0:  
+           if arena.map[next_position[1]][next_position[0]] != Dot.WALL:
+               self.direction = new_direction  # Поворачиваем сразу
+               self.buffered_direction = None  # Сбрасываем буфер
+           else:
+               self.buffered_direction = new_direction
 
     
     def get_hitbox(self):

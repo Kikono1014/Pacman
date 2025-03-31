@@ -96,13 +96,13 @@ class PacmanGame:
                 if e.key == pygame.K_ESCAPE or e.key == pygame.K_q:
                     self.playing = False
                 if e.key == pygame.K_w or e.key == pygame.K_UP:
-                    self.pacman.rotate((0, -1))
+                    self.pacman.rotate((0, -1), self.arena)
                 if e.key == pygame.K_a or e.key == pygame.K_LEFT:
-                    self.pacman.rotate((-1, 0))
+                    self.pacman.rotate((-1, 0), self.arena)
                 if e.key == pygame.K_s or e.key == pygame.K_DOWN:
-                    self.pacman.rotate((0, 1))
+                    self.pacman.rotate((0, 1), self.arena)
                 if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
-                    self.pacman.rotate((1, 0))
+                    self.pacman.rotate((1, 0), self.arena)
 
 
 
