@@ -86,9 +86,6 @@ class PacmanGame:
             if ghost.is_active:
                 self.render_object(ghost)
 
-        for ghost in self.ghosts:
-            if ghost.is_active:
-                self.render_object(ghost)
 
     def update(self):
         #! Test objects
@@ -110,9 +107,7 @@ class PacmanGame:
                     ghost.set_frightened()
 
         pygame.display.update()
-        #!
-        self.clock.tick(self.frame_rate)
-
+        
         self.clock.tick(self.frame_rate)
 
     def proceed_event(self):
@@ -123,13 +118,13 @@ class PacmanGame:
                 if e.key == pygame.K_ESCAPE or e.key == pygame.K_q:
                     self.playing = False
                 if e.key == pygame.K_w or e.key == pygame.K_UP:
-                    self.pacman.rotate((0, -1), self.arena)
+                    self.pacman.rotate((0, -1))
                 if e.key == pygame.K_a or e.key == pygame.K_LEFT:
-                    self.pacman.rotate((-1, 0), self.arena)
+                    self.pacman.rotate((-1, 0))
                 if e.key == pygame.K_s or e.key == pygame.K_DOWN:
-                    self.pacman.rotate((0, 1), self.arena)
+                    self.pacman.rotate((0, 1))
                 if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
-                    self.pacman.rotate((1, 0), self.arena)
+                    self.pacman.rotate((1, 0))
 
 
 
@@ -141,7 +136,7 @@ if __name__ == '__main__':
         preset = int(sys.argv[1])
     if len(sys.argv) >= 3:
         scale = int(sys.argv[2])
-    game = PacmanGame(10, 232, 256, scale, preset)
+    game = PacmanGame(20, 232, 256, scale, preset)
     while game.playing:
         game.proceed_event()
         game.render();
