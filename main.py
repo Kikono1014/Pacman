@@ -42,7 +42,7 @@ class PacmanGame:
         self.clock = pygame.time.Clock()
 
         pygame.display.set_caption("Pacman")
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
+        self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF | pygame.HWSURFACE)
 
         self.sprites = {}
         self.sprites_init()
