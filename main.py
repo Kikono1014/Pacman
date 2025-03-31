@@ -80,12 +80,28 @@ class PacmanGame:
 
         self.render_object(self.pacman)
 
+        for ghost in self.ghosts:
+            if ghost.is_active:
+                self.render_object(ghost)
+
     def update(self):
         prev_position = self.pacman.position  # Сохраняем предыдущую позицию
         self.pacman.move(self.arena)  # Передаём арену в move()
 
         if self.arena.map[self.pacman.position[1]][self.pacman.position[0]] == Dot.WALL:
             self.pacman.position = prev_position 
+
+
+        for ghost in self.ghosts:
+            ghost.move()
+
+        pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
+        if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
+            if self.arena.map[pacman_pos[1]][pacman_pos[0]] == Dot.PELLET:
+                self.arena.map[pacman_pos[1]][pacman_pos[0]] = Dot.EMPTY
+                self.arena.objects[pacman_pos[1]][pacman_pos[0]].change_sprite(0)
+                for ghost in self.ghosts:
+                    ghost.set_frightened()
 
         pygame.display.update()
         #!
@@ -123,5 +139,6 @@ if __name__ == '__main__':
         game.proceed_event()
         game.render();
         game.update()
+
     pygame.quit()
     sys.exit()
