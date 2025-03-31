@@ -30,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 14,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
@@ -74,13 +74,26 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.py",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Pacman\\main.py",
+              "RelativeDocumentMoniker": "main.py",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\main.py",
+              "RelativeToolTip": "main.py",
+              "ViewState": "AgIAADUAAAAAAAAAAAAowEwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
+              "WhenOpened": "2025-03-31T13:35:14.145Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 2,
               "Title": "sprite.py",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\Pacman\\sprite.py",
               "RelativeDocumentMoniker": "sprite.py",
               "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\sprite.py",
               "RelativeToolTip": "sprite.py",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-03-31T13:11:48.075Z",
               "EditorCaption": ""
@@ -93,7 +106,7 @@
               "RelativeDocumentMoniker": "moveable.py",
               "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\moveable.py",
               "RelativeToolTip": "moveable.py",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAowCQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-03-31T13:11:20.752Z",
               "EditorCaption": ""
@@ -119,22 +132,9 @@
               "RelativeDocumentMoniker": "arena.py",
               "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\arena.py",
               "RelativeToolTip": "arena.py",
-              "ViewState": "AgIAABcAAAAAAAAAAAAYwEEAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABcAAAAAAAAAAAAowEEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-03-31T13:10:54.302Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "main.py",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Pacman\\main.py",
-              "RelativeDocumentMoniker": "main.py",
-              "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\main.py",
-              "RelativeToolTip": "main.py",
-              "ViewState": "AgIAAEEAAAAAAAAAAAAYwE0AAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2025-03-31T13:06:54.454Z",
               "EditorCaption": ""
             }
           ]

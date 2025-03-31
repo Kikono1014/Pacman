@@ -27,12 +27,18 @@ class Moveable(GameObject):
 
         if arena.map[next_position[1]][next_position[0]] != Dot.WALL:
             self.position = next_position  # Разрешаем движение
+
         elif self.buffered_direction:  
-            # Если уперлись в стену, но есть буферное направление — пробуем его
+        # Если уперлись в стену, но есть буферное направление — пробуем его
             buffered_next = (self.position[0] + self.buffered_direction[0], self.position[1] + self.buffered_direction[1])
             if arena.map[buffered_next[1]][buffered_next[0]] != Dot.WALL:
                 self.direction = self.buffered_direction
                 self.position = buffered_next
+
+    # Проверяем, съел ли Пакман монетку на новой позиции
+        if arena.map[self.position[1]][self.position[0]] in [Dot.NORMAL, Dot.PELLET]:
+            arena.map[self.position[1]][self.position[0]] = Dot.EMPTY
+            arena.objects[self.position[1]][self.position[0]].change_sprite(1)
 
     def rotate(self, new_direction):
         self.buffered_direction = new_direction
