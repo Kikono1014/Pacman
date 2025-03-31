@@ -1,4 +1,4 @@
-import pygame
+﻿import pygame
 import sys
 from sprite import Sprite
 from gameobject import GameObject
@@ -75,21 +75,18 @@ class PacmanGame:
         
         self.render_arena()
 
-        #! Test objects
         self.render_object(self.pacman)
-        #!
 
     def update(self):
-        #! Test objects
-        prev_position = self.pacman.position
-        self.pacman.move()
+        prev_position = self.pacman.position  # Сохраняем предыдущую позицию
+        self.pacman.move(self.arena)  # Передаём арену в move()
+
         if self.arena.map[self.pacman.position[1]][self.pacman.position[0]] == Dot.WALL:
-            self.pacman.position = prev_position
+            self.pacman.position = prev_position 
 
         pygame.display.update()
-        #!
-
         self.clock.tick(self.frame_rate)
+
 
     def proceed_event(self):
         for e in pygame.event.get():
