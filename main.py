@@ -4,6 +4,10 @@ from sprite import Sprite
 from gameobject import GameObject
 from moveable import Moveable
 from arena import Arena
+
+
+# arena = PacmanArena(SCREEN_W, SCREEN_H)
+# pacman = PacMan(arena, 108, 184)
 from arena import Dot
 
 
@@ -11,6 +15,7 @@ from arena import Dot
 # pacman = PacMan(arena, 108, 184)
 
 class PacmanGame:
+
 
     def sprites_init(self):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
@@ -29,11 +34,13 @@ class PacmanGame:
         self.sprites["dot_sprites"] = dot_sprites
         
         
+        
         self.sprites["pacman"] = [
             Sprite(atlas, pygame.Rect(0 * 16, 0, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(1 * 16, 0, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(2 * 16, 0, 16, 16)).scale(self.scale)
         ]
+
 
 
 
@@ -55,7 +62,10 @@ class PacmanGame:
 
         #! Test objects
         self.pacman = Moveable(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 1.08)
+        #! Test objects
+        self.pacman = Moveable(self.sprites["pacman"], (0, 0), (0, 1), 1.08)
         self.pacman.change_sprite(2)
+        #!
         #!
 
         self.playing = True
@@ -75,7 +85,10 @@ class PacmanGame:
         
         self.render_arena()
 
+
+        #! Test objects
         self.render_object(self.pacman)
+        #!
 
     def update(self):
         prev_position = self.pacman.position  # Сохраняем предыдущую позицию
@@ -83,8 +96,10 @@ class PacmanGame:
 
         if self.arena.map[self.pacman.position[1]][self.pacman.position[0]] == Dot.WALL:
             self.pacman.position = prev_position 
+        self.pacman.move()
 
         pygame.display.update()
+
         self.clock.tick(self.frame_rate)
 
 
@@ -102,7 +117,7 @@ class PacmanGame:
                 if e.key == pygame.K_s or e.key == pygame.K_DOWN:
                     self.pacman.rotate((0, 1), self.arena)
                 if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
-                    self.pacman.rotate((1, 0), self.arena)
+                    self.pacman.rotate((1, 0))
 
 
 
@@ -122,7 +137,9 @@ if __name__ == '__main__':
     while game.playing:
         game.proceed_event()
         game.render();
+        game.render();
         game.update()
 
     pygame.quit()
     sys.exit()
+
