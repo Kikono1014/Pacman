@@ -1,4 +1,4 @@
-﻿import pygame
+import pygame
 import sys
 from sprite import Sprite
 from gameobject import GameObject
@@ -39,7 +39,7 @@ class PacmanGame:
 
         self.clock = pygame.time.Clock()
         pygame.display.set_caption("Pacman")
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
+        self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF | pygame.HWSURFACE)
 
         self.sprites = {}
         self.sprites_init()
@@ -78,22 +78,23 @@ class PacmanGame:
         self.screen.blit(self.arena.background.texture, (0, 0))
         self.render_arena()
 
+        #! Test objects
         self.render_object(self.pacman)
+        #!
 
         for ghost in self.ghosts:
             if ghost.is_active:
                 self.render_object(ghost)
 
-    def update(self):
-        prev_position = self.pacman.position  # Сохраняем предыдущую позицию
-        self.pacman.move(self.arena)  # Передаём арену в move()
 
-        if self.arena.map[self.pacman.position[1]][self.pacman.position[0]] == Dot.WALL:
-            self.pacman.position = prev_position 
+    def update(self):
+        self.pacman.update_destination()
+        self.pacman.move(self.arena.map)
+        
 
 
         for ghost in self.ghosts:
-            ghost.move()
+            ghost.move(self.arena.map)
 
         pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
         if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
@@ -104,9 +105,8 @@ class PacmanGame:
                     ghost.set_frightened()
 
         pygame.display.update()
-        #!
+        
         self.clock.tick(self.frame_rate)
-
 
     def proceed_event(self):
         for e in pygame.event.get():
@@ -116,13 +116,13 @@ class PacmanGame:
                 if e.key == pygame.K_ESCAPE or e.key == pygame.K_q:
                     self.playing = False
                 if e.key == pygame.K_w or e.key == pygame.K_UP:
-                    self.pacman.rotate((0, -1), self.arena)
+                    self.pacman.rotate((0, -1))
                 if e.key == pygame.K_a or e.key == pygame.K_LEFT:
-                    self.pacman.rotate((-1, 0), self.arena)
+                    self.pacman.rotate((-1, 0))
                 if e.key == pygame.K_s or e.key == pygame.K_DOWN:
-                    self.pacman.rotate((0, 1), self.arena)
+                    self.pacman.rotate((0, 1))
                 if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
-                    self.pacman.rotate((1, 0), self.arena)
+                    self.pacman.rotate((1, 0))
 
 
 
@@ -134,7 +134,7 @@ if __name__ == '__main__':
         preset = int(sys.argv[1])
     if len(sys.argv) >= 3:
         scale = int(sys.argv[2])
-    game = PacmanGame(10, 232, 256, scale, preset)
+    game = PacmanGame(20, 232, 256, scale, preset)
     while game.playing:
         game.proceed_event()
         game.render();
