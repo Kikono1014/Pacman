@@ -1,6 +1,7 @@
 import pygame
 from gameobject import GameObject
 from sprite import Sprite
+from arena import Dot
 
 class Moveable(GameObject):
     def __init__(self, 
@@ -19,10 +20,18 @@ class Moveable(GameObject):
         self.direction : tuple[int, int] = direction
         self.speed : float = speed
 
+        self.destination : tuple[int, int] = self.position
 
-    
-    def move(self):
-        self.position = tuple(map(sum, zip(self.position, self.direction)))
+
+    def update_destination(self):
+        self.destination = tuple(map(sum, zip(self.position, self.direction)))
+
+    def move(self, map : list[list[Dot]]):
+        
+        self.destination = ((self.destination[0] + len(map[0])) % len(map[0]), (self.destination[1] + len(map)) % len(map))
+
+        if (map[self.destination[1]][self.destination[0]] != Dot.WALL):
+            self.position = self.destination
 
     def rotate(self, direction : tuple[int, int]):
         self.direction = direction

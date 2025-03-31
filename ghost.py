@@ -72,7 +72,7 @@ class Ghost(Moveable):
         # Цей метод буде перевизначений у дочірніх класах
         pass
 
-    def move(self):
+    def move(self, arena_map : list[list[Dot]]):
         if not self.is_active:
             self.respawn_timer -= 1
             if self.respawn_timer <= 0:
@@ -97,7 +97,7 @@ class Ghost(Moveable):
             for direction in directions:
                 if self.can_move(direction):
                     self.rotate(direction)
-                    super().move()
+                    super().move(arena_map)
                     break
         else:
             self.speed = self.base_speed
@@ -116,7 +116,7 @@ class Ghost(Moveable):
 
             self.rotate(best_direction)
             if self.can_move(self.direction):
-                super().move()
+                super().move(arena_map)
 
         if self.check_collision(self.pacman):
             if self.mode == "frightened":

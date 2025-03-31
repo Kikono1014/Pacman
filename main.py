@@ -88,15 +88,13 @@ class PacmanGame:
 
 
     def update(self):
-        #! Test objects
-        prev_position = self.pacman.position
-        self.pacman.move()
-        if self.arena.map[self.pacman.position[1]][self.pacman.position[0]] == Dot.WALL:
-            self.pacman.position = prev_position
+        self.pacman.update_destination()
+        self.pacman.move(self.arena.map)
+        
 
 
         for ghost in self.ghosts:
-            ghost.move()
+            ghost.move(self.arena.map)
 
         pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
         if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
