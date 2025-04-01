@@ -2,7 +2,7 @@ import pygame
 import sys
 from sprite import Sprite
 from gameobject import GameObject
-from moveable import Moveable
+from moveable import Moveable  # Використовуємо Moveable замість PacMan
 from arena import Arena
 from arena import Dot
 from ghosts import Blinky, Pinky, Inky, Clyde
@@ -21,6 +21,7 @@ class PacmanGame:
             )
         self.sprites["dot_sprites"] = dot_sprites
         
+        # Встановлюємо спрайти для PacMan (залишаємо три, але використовуємо лише один)
         self.sprites["pacman"] = [
             Sprite(atlas, pygame.Rect(0 * 16, 0, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(1 * 16, 0, 16, 16)).scale(self.scale),
@@ -42,15 +43,16 @@ class PacmanGame:
 
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
-        self.pacman = Moveable(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 0.2)
-        self.pacman.change_sprite(2)
+        # PacMan як Moveable, як у початковому коді
+        self.pacman = Moveable(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 1.08)
+        self.pacman.change_sprite(2)  # Використовуємо відкритий рот, як у початковому коді
         self.pacman.game = self
 
         self.ghosts = [
-            Blinky(self.arena.ghost_start, (0, 1), 0.18, self.arena, self.pacman, self.scale),
-            Pinky(self.arena.ghost_start, (0, -1), 0.17, self.arena, self.pacman, self.scale),
-            Inky(self.arena.ghost_start, (-1, 0), 0.16, self.arena, self.pacman, self.scale),
-            Clyde(self.arena.ghost_start, (1, 0), 0.15, self.arena, self.pacman, self.scale),
+            Blinky(self.arena.ghost_start, (0, 1), 0.09, self.arena, self.pacman, self.scale),
+            Pinky(self.arena.ghost_start, (0, -1), 0.09, self.arena, self.pacman, self.scale),
+            Inky(self.arena.ghost_start, (-1, 0), 0.09, self.arena, self.pacman, self.scale),
+            Clyde(self.arena.ghost_start, (1, 0), 0.09, self.arena, self.pacman, self.scale),
         ]
         for ghost in self.ghosts:
             ghost.game = self
@@ -72,17 +74,26 @@ class PacmanGame:
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.arena.background.texture, (0, 0))
         self.render_arena()
+
         self.render_object(self.pacman)
         for ghost in self.ghosts:
             if ghost.is_active:
                 self.render_object(ghost)
+
         pygame.display.update()
 
     def update(self):
-        self.pacman.move(self.arena)
+        # Базовий рух для PacMan із перевіркою стін, як у початковому коді
+        prev_position = self.pacman.position
+        self.pacman.move()
+        if self.arena.map[int(self.pacman.position[1])][int(self.pacman.position[0])] == Dot.WALL:
+            self.pacman.position = prev_position
+
+        # Логіка привидів залишається без змін
         for ghost in self.ghosts:
             ghost.move()
 
+        # Проста логіка поїдання кульок (без наміру руху чи очок, як у початковому коді)
         pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
         if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
             if self.arena.map[pacman_pos[1]][pacman_pos[0]] == Dot.PELLET:
@@ -122,5 +133,6 @@ if __name__ == '__main__':
         game.proceed_event()
         game.render()
         game.update()
+
     pygame.quit()
     sys.exit()
