@@ -1,11 +1,10 @@
 import pygame
 import sys
 from sprite import Sprite
-from gameobject import GameObject
-from moveable import Moveable  # Використовуємо Moveable замість PacMan
 from arena import Arena
-from arena import Dot
+from pacman import PacMan
 from ghosts import Blinky, Pinky, Inky, Clyde
+from gameobject import GameObject
 
 class PacmanGame:
     def sprites_init(self):
@@ -21,7 +20,6 @@ class PacmanGame:
             )
         self.sprites["dot_sprites"] = dot_sprites
         
-        # Встановлюємо спрайти для PacMan (залишаємо три, але використовуємо лише один)
         self.sprites["pacman"] = [
             Sprite(atlas, pygame.Rect(0 * 16, 0, 16, 16)).scale(self.scale),
             Sprite(atlas, pygame.Rect(1 * 16, 0, 16, 16)).scale(self.scale),
@@ -43,9 +41,7 @@ class PacmanGame:
 
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
-        # PacMan як Moveable, як у початковому коді
-        self.pacman = Moveable(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 1.08)
-        self.pacman.change_sprite(2)  # Використовуємо відкритий рот, як у початковому коді
+        self.pacman = PacMan(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 0.108)
         self.pacman.game = self
 
         self.ghosts = [
@@ -83,24 +79,21 @@ class PacmanGame:
         pygame.display.update()
 
     def update(self):
-        # Базовий рух для PacMan із перевіркою стін, як у початковому коді
-        prev_position = self.pacman.position
-        self.pacman.move()
-        if self.arena.map[int(self.pacman.position[1])][int(self.pacman.position[0])] == Dot.WALL:
-            self.pacman.position = prev_position
+        self.pacman.update_position()
 
-        # Логіка привидів залишається без змін
         for ghost in self.ghosts:
             ghost.move()
-
-        # Проста логіка поїдання кульок (без наміру руху чи очок, як у початковому коді)
-        pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
-        if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
-            if self.arena.map[pacman_pos[1]][pacman_pos[0]] == Dot.PELLET:
-                self.arena.map[pacman_pos[1]][pacman_pos[0]] = Dot.EMPTY
-                self.arena.objects[pacman_pos[1]][pacman_pos[0]].change_sprite(0)
-                for ghost in self.ghosts:
-                    ghost.set_frightened()
+            if ghost.check_collision(self.pacman):
+                if ghost.mode == "frightened":
+                    ghost.position = self.arena.ghost_start
+                    ghost.is_active = False
+                    ghost.respawn_timer = 120  # 2 seconds at 60 FPS
+                    self.pacman.score += 200
+                elif ghost.is_active:
+                    self.pacman.lives -= 1
+                    self.pacman.position = self.arena.pacman_start
+                    if self.pacman.lives <= 0:
+                        self.game_over = True
 
         self.clock.tick(self.frame_rate)
 

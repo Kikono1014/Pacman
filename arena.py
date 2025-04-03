@@ -54,4 +54,3 @@ class Arena:
             x = int(values[0])
             y = int(values[1])
             self.ghost_start = (x, y)
-

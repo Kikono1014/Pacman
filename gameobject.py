@@ -24,4 +24,3 @@ class GameObject:
 
     def change_sprite(self, id: int):
         self.current = id
-

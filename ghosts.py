@@ -21,9 +21,7 @@ class Blinky(Ghost):
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
             # Scared
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (len(self.arena.map[0]) - 1, 0)
@@ -53,9 +51,7 @@ class Pinky(Ghost):
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
             # Scared
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (0, 0)
@@ -89,9 +85,7 @@ class Inky(Ghost):
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
             # Scared
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (len(self.arena.map[0]) - 1, len(self.arena.map) - 1)
@@ -130,9 +124,7 @@ class Clyde(Ghost):
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
             # Scared
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (0, len(self.arena.map) - 1)

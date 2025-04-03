@@ -16,8 +16,18 @@ class Ghost(Moveable):
         self.base_speed = speed
         self.respawn_timer = 0
         self.is_active = True
+        self.mode_schedule = [
+            (420, "scatter"),  # 7 seconds
+            (1200, "chase"),   # 20 seconds
+            (420, "scatter"),  # 7 seconds
+            (1200, "chase"),   # 20 seconds
+            (300, "scatter"),  # 5 seconds
+            (1200, "chase"),   # 20 seconds
+            (300, "scatter"),  # 5 seconds
+            (-1, "chase")      # Infinite chase
+        ]
+        self.mode_index = 0
         self.mode_timer = 0
-        self.mode_duration = 420  # 7 секунд при 60 FPS
 
         self.sprites = sprites
         self.current_frame = 0
@@ -26,7 +36,7 @@ class Ghost(Moveable):
     def get_sprite(self):
         self.current_frame = (self.current_frame + self.animation_speed) % 2
         if self.mode == "frightened":
-            return self.sprites[4][int(self.current_frame) % 2]  # Анімація наляканого стану
+            return self.sprites[4][int(self.current_frame) % 2]  # Frightened animation
         else:
             direction_id = {(1, 0): 0, (-1, 0): 1, (0, -1): 2, (0, 1): 3}.get(self.direction, 0)
             return self.sprites[direction_id][int(self.current_frame)]
@@ -52,11 +62,11 @@ class Ghost(Moveable):
 
     def set_frightened(self):
         self.mode = "frightened"
-        self.frightened_timer = 420  # 7 секунд при 60 FPS
+        self.frightened_timer = 420  # 7 seconds at 60 FPS
         self.current_frame = 0
 
     def update_destination(self):
-        # Цей метод буде перевизначений у дочірніх класах
+        # This method will be overridden in child classes
         pass
 
     def move(self):
@@ -64,35 +74,44 @@ class Ghost(Moveable):
             self.respawn_timer -= 1
             if self.respawn_timer <= 0:
                 self.is_active = True
-                self.mode = "scatter"
+                self.position = self.arena.ghost_start
+                self.mode_index = 0  # Reset mode on respawn
+                self.mode_timer = 0
             return
 
-        # Оновлення режимів
+        # Update mode based on schedule
+        current_duration, current_mode = self.mode_schedule[self.mode_index]
+        self.mode_timer += 1
+        if current_duration != -1 and self.mode_timer >= current_duration:
+            self.mode_timer = 0
+            self.mode_index = min(self.mode_index + 1, len(self.mode_schedule) - 1)
+            self.mode = self.mode_schedule[self.mode_index][1]
+
         if self.mode != "frightened":
-            self.mode_timer += 1
-            if self.mode_timer >= self.mode_duration:
-                self.mode_timer = 0
-                self.mode = "chase" if self.mode == "scatter" else "scatter"
+            self.update_destination()
 
-        self.update_destination()
-
-        # Рух лише на перехрестях
+        # Move only at intersections
         if self.position[0] % 1 < 0.1 and self.position[1] % 1 < 0.1:
             directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-            valid_directions = [d for d in directions if self.can_move(d) and d != tuple(-x for x in self.direction)]  # Без повороту назад
-            if not valid_directions:  # Якщо немає варіантів, крім повороту назад
+            valid_directions = [d for d in directions if self.can_move(d) and d != tuple(-x for x in self.direction)]  # No reversing
+            if not valid_directions:  # If no options except reverse
                 valid_directions = [d for d in directions if self.can_move(d)]
 
-            if self.mode == "frightened":
-                self.speed = self.base_speed * 0.5
-                self.frightened_timer -= 1
-                if self.frightened_timer <= 0:
-                    self.mode = "scatter"
-                if valid_directions:
-                    self.rotate(valid_directions[random.randint(0, len(valid_directions) - 1)])
-            else:
-                self.speed = self.base_speed
-                if valid_directions:
+            if valid_directions:
+                if self.mode == "frightened":
+                    self.speed = self.base_speed * 0.5
+                    self.frightened_timer -= 1
+                    if self.frightened_timer <= 0:
+                        self.mode = self.mode_schedule[self.mode_index][1]
+                    # Обираємо напрямок, який максимально віддаляє від Pac-Man
+                    best_direction = max(
+                        valid_directions,
+                        key=lambda d: ((self.position[0] + d[0] - self.pacman.position[0]) ** 2 +
+                                       (self.position[1] + d[1] - self.pacman.position[1]) ** 2) ** 0.5
+                    )
+                    self.rotate(best_direction)
+                else:
+                    self.speed = self.base_speed
                     best_direction = min(
                         valid_directions,
                         key=lambda d: ((self.position[0] + d[0] - self.destination[0]) ** 2 +
@@ -100,17 +119,6 @@ class Ghost(Moveable):
                     )
                     self.rotate(best_direction)
 
-        # Плавний рух
+        # Smooth movement
         next_pos = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
         self.position = next_pos
-
-        # Перевірка колізії з PacMan
-        if self.check_collision(self.pacman):
-            if self.mode == "frightened":
-                self.position = self.arena.ghost_start
-                self.is_active = False
-                self.respawn_timer = 120
-                # Очки не додаємо, бо це логіка PacMan
-            else:
-                self.pacman.position = self.arena.pacman_start
-                # Штраф не віднімаємо, бо це логіка PacMan
