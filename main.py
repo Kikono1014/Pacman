@@ -6,7 +6,7 @@ from moveable import Moveable
 from arena import Arena
 from arena import Dot
 from ghosts import Blinky, Pinky, Inky, Clyde  # Оновлений імпорт
-
+from random import randint
 class PacmanGame:
 
     def sprites_init(self):
@@ -51,15 +51,15 @@ class PacmanGame:
         self.pacman.change_sprite(2)
         self.pacman.game = self
 
-        # self.ghosts = [
-        #     Blinky(self.arena.ghost_start, (0, 1), 1.0, self.arena, self.pacman, self.scale),
-        #     Pinky(self.arena.ghost_start, (0, -1), 0.9, self.arena, self.pacman, self.scale),
-        #     Inky(self.arena.ghost_start, (-1, 0), 0.8, self.arena, self.pacman, self.scale),
-        #     Clyde(self.arena.ghost_start, (1, 0), 0.7, self.arena, self.pacman, self.scale),
-        # ]
-        # for ghost in self.ghosts:
-        #     ghost.game = self
-        #     ghost.mode = "scatter"
+        self.ghosts = [
+            Blinky(self.arena.ghost_start, (0, 1), 1.0, self.arena, self.pacman, self.scale),
+            Pinky(self.arena.ghost_start, (0, -1), 0.9, self.arena, self.pacman, self.scale),
+            Inky(self.arena.ghost_start, (-1, 0), 0.8, self.arena, self.pacman, self.scale),
+            Clyde(self.arena.ghost_start, (1, 0), 0.7, self.arena, self.pacman, self.scale),
+        ]
+        for ghost in self.ghosts:
+            ghost.game = self
+            ghost.mode = "scatter"
 
         self.playing = True
         self.game_over = False
@@ -77,9 +77,9 @@ class PacmanGame:
         self.render_object(self.pacman)
         #!
 
-        # for ghost in self.ghosts:
-        #     if ghost.is_active:
-        #         self.render_object(ghost)
+        for ghost in self.ghosts:
+            if ghost.is_active:
+                self.render_object(ghost)
 
 
     def update(self):
@@ -87,19 +87,22 @@ class PacmanGame:
         self.pacman.move(self.arena.map)
 
         self.arena.remove_dot(self.pacman.position)
+
         
+        if (len(self.arena.get_dots(Dot.EMPTY)) > 80 and len(self.arena.get_dots(Dot.FRUIT)) == 0 and randint(0, 100) == 20):
+            self.arena.add_fruit()
 
 
-        # for ghost in self.ghosts:
-        #     ghost.move(self.arena.map)
+        for ghost in self.ghosts:
+            ghost.move(self.arena.map)
 
-        # pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
-        # if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
-        #     if self.arena.map[pacman_pos[1]][pacman_pos[0]] == Dot.PELLET:
-        #         self.arena.map[pacman_pos[1]][pacman_pos[0]] = Dot.EMPTY
-        #         self.arena.objects[pacman_pos[1]][pacman_pos[0]].change_sprite(0)
-        #         for ghost in self.ghosts:
-        #             ghost.set_frightened()
+        pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
+        if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
+            if self.arena.map[pacman_pos[1]][pacman_pos[0]] == Dot.PELLET:
+                self.arena.map[pacman_pos[1]][pacman_pos[0]] = Dot.EMPTY
+                self.arena.objects[pacman_pos[1]][pacman_pos[0]].change_sprite(0)
+                for ghost in self.ghosts:
+                    ghost.set_frightened()
 
         pygame.display.update()
         

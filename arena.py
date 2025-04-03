@@ -70,12 +70,51 @@ class Arena:
 
     def remove_dot(self, position : tuple[int, int]):
         area = self.dot_sprites[1].area
-        surface = pygame.surface.Surface((area.w/2, area.h/2))
-        surface.fill((0, 0, 0))
-        hitbox = self.get_dot_hitbox(position)
-        hitbox.move_ip(area.w/4, area.h/4)
-        self.background.texture.blit(surface, hitbox)
 
+        if (self.map[position[1]][position[0]] == Dot.EMPTY):
+            return
+
+        if (self.map[position[1]][position[0]] != Dot.FRUIT):
+            surface = pygame.surface.Surface((area.w/2, area.h/2))
+            surface.fill((0, 0, 0))
+            hitbox = self.get_dot_hitbox(position)
+            hitbox.move_ip(area.w/4, area.h/4)
+            self.background.texture.blit(surface, hitbox)
+        else:
+            surface = pygame.surface.Surface((area.w - area.w / 8, area.h - area.h / 8))
+            surface.fill((0, 0, 0))
+            hitbox = self.get_dot_hitbox(position)
+            hitbox.move_ip(area.w/16, area.h/16)
+            self.background.texture.blit(surface, hitbox)
+
+        self.map[position[1]][position[0]] = Dot.EMPTY
+
+
+    def get_dots(self, filter: Dot = Dot.NORMAL) -> tuple[int, int]:
+        return [
+            (x, y)
+            for y, row in enumerate(self.map)
+            for x, dot in enumerate(row)
+            if dot == filter
+        ]
+
+    def add_fruit(self):
+        empty = self.get_dots(Dot.EMPTY)
+        if (len(empty) == 0): 
+            return
+        
+        position = choice(empty)
+
+        sprite = choice(self.dot_sprites[3:])
+        
+        hitbox = self.get_dot_hitbox(position)
+
+        self.background.texture.blit(sprite.texture, hitbox, sprite.area)
+
+        self.map[position[1]][position[0]] = Dot.FRUIT
+                
+            
+        
 
     def get_dot_hitbox(self, position : tuple[int, int]):
         return pygame.Rect(
