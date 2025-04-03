@@ -3,9 +3,10 @@ import sys
 from sprite import Sprite
 from arena import Arena
 from pacman import PacMan
-from ghosts import Blinky, Pinky, Inky, Clyde
 from gameobject import GameObject
-
+from arena import Dot
+from ghosts import Blinky, Pinky, Inky, Clyde  # Оновлений імпорт
+from random import randint
 class PacmanGame:
     def sprites_init(self):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
@@ -41,8 +42,7 @@ class PacmanGame:
 
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
-        self.pacman = PacMan(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 0.108)
-        self.pacman.game = self
+        self.pacman = PacMan(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.108)
 
         self.ghosts = [
             Blinky(self.arena.ghost_start, (0, 1), 0.09, self.arena, self.pacman, self.scale),
@@ -60,16 +60,11 @@ class PacmanGame:
     def render_object(self, object: GameObject):
         sprite = object.get_sprite()
         self.screen.blit(sprite.texture, object.get_hitbox(), sprite.area)
-
-    def render_arena(self):
-        for y in range(len(self.arena.map)):
-            for x in range(len(self.arena.map[0])):
-                self.render_object(self.arena.objects[y][x])
+    
 
     def render(self):
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.arena.background.texture, (0, 0))
-        self.render_arena()
 
         self.render_object(self.pacman)
         for ghost in self.ghosts:
@@ -79,7 +74,7 @@ class PacmanGame:
         pygame.display.update()
 
     def update(self):
-        self.pacman.update_position()
+        self.pacman.update_destination(self.arena.map)
 
         for ghost in self.ghosts:
             ghost.move()
@@ -94,6 +89,19 @@ class PacmanGame:
                     self.pacman.position = self.arena.pacman_start
                     if self.pacman.lives <= 0:
                         self.game_over = True
+                        
+        self.pacman.move()
+
+        pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
+        self.arena.remove_dot(pacman_pos)
+
+        
+        if (len(self.arena.get_dots(Dot.EMPTY)) > 80 and len(self.arena.get_dots(Dot.FRUIT)) == 0 and randint(0, 100) == 20):
+            self.arena.add_fruit()
+
+
+        for ghost in self.ghosts:
+            ghost.move()
 
         self.clock.tick(self.frame_rate)
 

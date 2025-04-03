@@ -10,7 +10,6 @@ class Ghost(Moveable):
         self.destination: tuple[int, int] = position
         self.arena = arena
         self.pacman = pacman
-        self.game = pacman.game
         self.mode = "scatter"
         self.frightened_timer = 0
         self.base_speed = speed
