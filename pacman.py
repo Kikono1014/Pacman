@@ -15,3 +15,9 @@ class ClassName(object):
         
         if self.can_move(self.direction):
             super().update_destination()
+
+    def can_move(self, direction):
+        """Проверяет, можно ли двигаться в заданном направлении."""
+        new_x = (self.position[0] + direction[0]) % len(self.arena.map[0])
+        new_y = (self.position[1] + direction[1]) % len(self.arena.map)
+        return self.arena.map[new_y][new_x] != Dot.WALL
