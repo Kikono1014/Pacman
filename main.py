@@ -7,6 +7,7 @@ from arena import Arena
 from arena import Dot
 from ghosts import Blinky, Pinky, Inky, Clyde  # Оновлений імпорт
 from random import randint
+from pacman import Pacman
 class PacmanGame:
 
     def sprites_init(self):
@@ -47,7 +48,7 @@ class PacmanGame:
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
         #! Test objects
-        self.pacman = Moveable(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 1.08)
+        self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (0, 1), 1.08, self.arena)
         self.pacman.change_sprite(2)
         self.pacman.game = self
 
