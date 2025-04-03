@@ -51,15 +51,15 @@ class PacmanGame:
         self.pacman.change_sprite(2)
         self.pacman.game = self
 
-        self.ghosts = [
-            Blinky(self.arena.ghost_start, (0, 1), 1.0, self.arena, self.pacman, self.scale),
-            Pinky(self.arena.ghost_start, (0, -1), 0.9, self.arena, self.pacman, self.scale),
-            Inky(self.arena.ghost_start, (-1, 0), 0.8, self.arena, self.pacman, self.scale),
-            Clyde(self.arena.ghost_start, (1, 0), 0.7, self.arena, self.pacman, self.scale),
-        ]
-        for ghost in self.ghosts:
-            ghost.game = self
-            ghost.mode = "scatter"
+        # self.ghosts = [
+        #     Blinky(self.arena.ghost_start, (0, 1), 1.0, self.arena, self.pacman, self.scale),
+        #     Pinky(self.arena.ghost_start, (0, -1), 0.9, self.arena, self.pacman, self.scale),
+        #     Inky(self.arena.ghost_start, (-1, 0), 0.8, self.arena, self.pacman, self.scale),
+        #     Clyde(self.arena.ghost_start, (1, 0), 0.7, self.arena, self.pacman, self.scale),
+        # ]
+        # for ghost in self.ghosts:
+        #     ghost.game = self
+        #     ghost.mode = "scatter"
 
         self.playing = True
         self.game_over = False
@@ -67,42 +67,39 @@ class PacmanGame:
     def render_object(self, object: GameObject):
         sprite = object.get_sprite()
         self.screen.blit(sprite.texture, object.get_hitbox(), sprite.area)
-
-    def render_arena(self):
-        for y in range(len(self.arena.map)):
-            for x in range(len(self.arena.map[0])):
-                self.render_object(self.arena.objects[y][x])
+    
 
     def render(self):
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.arena.background.texture, (0, 0))
-        self.render_arena()
 
         #! Test objects
         self.render_object(self.pacman)
         #!
 
-        for ghost in self.ghosts:
-            if ghost.is_active:
-                self.render_object(ghost)
+        # for ghost in self.ghosts:
+        #     if ghost.is_active:
+        #         self.render_object(ghost)
 
 
     def update(self):
         self.pacman.update_destination()
         self.pacman.move(self.arena.map)
+
+        self.arena.remove_dot(self.pacman.position)
         
 
 
-        for ghost in self.ghosts:
-            ghost.move(self.arena.map)
+        # for ghost in self.ghosts:
+        #     ghost.move(self.arena.map)
 
-        pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
-        if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
-            if self.arena.map[pacman_pos[1]][pacman_pos[0]] == Dot.PELLET:
-                self.arena.map[pacman_pos[1]][pacman_pos[0]] = Dot.EMPTY
-                self.arena.objects[pacman_pos[1]][pacman_pos[0]].change_sprite(0)
-                for ghost in self.ghosts:
-                    ghost.set_frightened()
+        # pacman_pos = (int(self.pacman.position[0]), int(self.pacman.position[1]))
+        # if 0 <= pacman_pos[1] < len(self.arena.map) and 0 <= pacman_pos[0] < len(self.arena.map[0]):
+        #     if self.arena.map[pacman_pos[1]][pacman_pos[0]] == Dot.PELLET:
+        #         self.arena.map[pacman_pos[1]][pacman_pos[0]] = Dot.EMPTY
+        #         self.arena.objects[pacman_pos[1]][pacman_pos[0]].change_sprite(0)
+        #         for ghost in self.ghosts:
+        #             ghost.set_frightened()
 
         pygame.display.update()
         
@@ -134,7 +131,7 @@ if __name__ == '__main__':
         preset = int(sys.argv[1])
     if len(sys.argv) >= 3:
         scale = int(sys.argv[2])
-    game = PacmanGame(20, 232, 256, scale, preset)
+    game = PacmanGame(10, 232, 256, scale, preset)
     while game.playing:
         game.proceed_event()
         game.render();
