@@ -6,7 +6,7 @@ from moveable import Moveable
 from arena import Arena
 from arena import Dot
 from ghosts import Blinky, Pinky, Inky, Clyde  # Оновлений імпорт
-
+from random import randint
 class PacmanGame:
 
     def sprites_init(self):
@@ -67,16 +67,11 @@ class PacmanGame:
     def render_object(self, object: GameObject):
         sprite = object.get_sprite()
         self.screen.blit(sprite.texture, object.get_hitbox(), sprite.area)
-
-    def render_arena(self):
-        for y in range(len(self.arena.map)):
-            for x in range(len(self.arena.map[0])):
-                self.render_object(self.arena.objects[y][x])
+    
 
     def render(self):
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.arena.background.texture, (0, 0))
-        self.render_arena()
 
         #! Test objects
         self.render_object(self.pacman)
@@ -90,7 +85,12 @@ class PacmanGame:
     def update(self):
         self.pacman.update_destination()
         self.pacman.move(self.arena.map)
+
+        self.arena.remove_dot(self.pacman.position)
+
         
+        if (len(self.arena.get_dots(Dot.EMPTY)) > 80 and len(self.arena.get_dots(Dot.FRUIT)) == 0 and randint(0, 100) == 20):
+            self.arena.add_fruit()
 
 
         for ghost in self.ghosts:
@@ -134,7 +134,7 @@ if __name__ == '__main__':
         preset = int(sys.argv[1])
     if len(sys.argv) >= 3:
         scale = int(sys.argv[2])
-    game = PacmanGame(20, 232, 256, scale, preset)
+    game = PacmanGame(10, 232, 256, scale, preset)
     while game.playing:
         game.proceed_event()
         game.render();
