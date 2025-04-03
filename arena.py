@@ -77,6 +77,17 @@ class Arena:
         self.background.texture.blit(surface, hitbox)
 
 
+    def get_random_empty_dot(self) -> tuple[int, int]:
+        empty = filter(lambda d: d == Dot.EMPTY, [dot for row in self.map for dot in row])
+
+        # for x in range(len(self.map[0])):
+        #     for y in range(len(self.map)):
+        #         if self.map[y][x] == Dot.EMPTY:
+        #             empty.append((x, y))
+
+        return choice(empty)
+
+
     def get_dot_hitbox(self, position : tuple[int, int]):
         return pygame.Rect(
         position[0] * self.dot_sprites[1].area.w / 2,
