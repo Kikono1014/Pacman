@@ -21,3 +21,7 @@ class ClassName(object):
         new_x = (self.position[0] + direction[0]) % len(self.arena.map[0])
         new_y = (self.position[1] + direction[1]) % len(self.arena.map)
         return self.arena.map[new_y][new_x] != Dot.WALL
+
+    def rotate(self, direction):
+        """«апоминает следующее направление движени€."""
+        self.next_direction = direction
