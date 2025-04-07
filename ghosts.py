@@ -7,19 +7,14 @@ class Blinky(Ghost):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
         row = 4 * 16
         sprites = [
-            # right
             [Sprite(atlas, pygame.Rect(0, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(1 * 16, row, 16, 16)).scale(scale)],
-            # left
             [Sprite(atlas, pygame.Rect(2 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(3 * 16, row, 16, 16)).scale(scale)],
-            # up
             [Sprite(atlas, pygame.Rect(4 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(5 * 16, row, 16, 16)).scale(scale)],
-            # down
             [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
-            # Scared
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
         ]
@@ -37,19 +32,14 @@ class Pinky(Ghost):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
         row = 5 * 16
         sprites = [
-            # right
             [Sprite(atlas, pygame.Rect(0, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(1 * 16, row, 16, 16)).scale(scale)],
-            # left
             [Sprite(atlas, pygame.Rect(2 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(3 * 16, row, 16, 16)).scale(scale)],
-            # up
             [Sprite(atlas, pygame.Rect(4 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(5 * 16, row, 16, 16)).scale(scale)],
-            # down
             [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
-            # Scared
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
         ]
@@ -71,19 +61,14 @@ class Inky(Ghost):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
         row = 6 * 16
         sprites = [
-            # right
             [Sprite(atlas, pygame.Rect(0, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(1 * 16, row, 16, 16)).scale(scale)],
-            # left
             [Sprite(atlas, pygame.Rect(2 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(3 * 16, row, 16, 16)).scale(scale)],
-            # up
             [Sprite(atlas, pygame.Rect(4 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(5 * 16, row, 16, 16)).scale(scale)],
-            # down
             [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
-            # Scared
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
         ]
@@ -110,19 +95,14 @@ class Clyde(Ghost):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
         row = 7 * 16
         sprites = [
-            # right
             [Sprite(atlas, pygame.Rect(0, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(1 * 16, row, 16, 16)).scale(scale)],
-            # left
             [Sprite(atlas, pygame.Rect(2 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(3 * 16, row, 16, 16)).scale(scale)],
-            # up
             [Sprite(atlas, pygame.Rect(4 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(5 * 16, row, 16, 16)).scale(scale)],
-            # down
             [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
-            # Scared
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
         ]

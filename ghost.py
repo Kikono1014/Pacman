@@ -10,6 +10,7 @@ class Ghost(Moveable):
         self.destination: tuple[int, int] = position
         self.arena = arena
         self.pacman = pacman
+        self.game = pacman.game
         self.mode = "scatter"
         self.frightened_timer = 0
         self.base_speed = speed
@@ -46,11 +47,6 @@ class Ghost(Moveable):
         if 0 <= y < len(self.arena.map) and 0 <= x < len(self.arena.map[0]):
             if self.arena.map[y][x] == Dot.WALL:
                 return False
-            for other_ghost in self.game.ghosts:
-                if other_ghost != self and other_ghost.is_active:
-                    other_x, other_y = int(other_ghost.position[0]), int(other_ghost.position[1])
-                    if other_x == x and other_y == y:
-                        return False
             return True
         return False
 
@@ -102,7 +98,6 @@ class Ghost(Moveable):
                     self.frightened_timer -= 1
                     if self.frightened_timer <= 0:
                         self.mode = self.mode_schedule[self.mode_index][1]
-                    # Обираємо напрямок, який максимально віддаляє від Pac-Man
                     best_direction = max(
                         valid_directions,
                         key=lambda d: ((self.position[0] + d[0] - self.pacman.position[0]) ** 2 +

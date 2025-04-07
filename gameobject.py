@@ -1,5 +1,5 @@
 import pygame
-from sprite import Sprite
+from sprite import Sprite  # Додано імпорт Sprite
 
 class GameObject:
     def __init__(self, sprites: list[Sprite], position: tuple[int, int]):
