@@ -119,10 +119,3 @@ class Pacman(Moveable):
             sprite.area.w,
             sprite.area.h
         )
-
-    def update_destination(self):
-        pass  # Not used
-
-    def move(self, map):
-        self.update_position()  # Redirect to update_position
-
