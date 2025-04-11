@@ -64,16 +64,9 @@ class PacmanGame:
         sprite = object.get_sprite()
         self.screen.blit(sprite.texture, object.get_hitbox(), sprite.area)
 
-    def render_arena(self):
-        for y in range(len(self.arena.map)):
-            for x in range(len(self.arena.map[0])):
-                self.render_object(self.arena.objects[y][x])
-
     def render(self):
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.arena.background.texture, (0, 0))
-        self.render_arena()
-
         self.render_object(self.pacman)
         for ghost in self.ghosts:
             if ghost.is_active:
