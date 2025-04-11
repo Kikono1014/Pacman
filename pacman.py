@@ -4,11 +4,11 @@ from sprite import Sprite
 from arena import Dot
 from typing import Tuple
 
-class PacMan(Moveable):
-    def __init__(self, sprites: list[list[Sprite]], position: tuple[int, int], direction: tuple[int, int], speed: float, tile_size: int = 16):
-        """Initialize Pac-Man with sprites, position, direction, speed, and tile size."""
-        super().__init__(sprites[0], position, direction, speed)
-        self.all_sprites = sprites
+class Pacman(Moveable):
+    def __init__(self, sprites: list[Sprite], position: tuple[int, int], direction: tuple[int, int], speed: float, arena):
+        super().__init__(sprites, position, direction, speed)
+        self.arena = arena
+        self.all_sprites = [sprites]  # Wrap single sprite list for compatibility
         self.lives: int = 3
         self.score: int = 0
         self.fruits: int = 0
@@ -16,31 +16,27 @@ class PacMan(Moveable):
         self.animation_frame: float = 0.0
         self.animation_speed: float = 0.1
         self.game = None
-        self.tile_size = tile_size
 
     def rotate(self, direction: tuple[int, int]):
-        """Queue a new direction to be applied when possible."""
         self.next_direction = direction
 
     def can_move(self, direction: tuple[int, int]) -> bool:
-        """Check if Pac-Man can move in the given direction from the current tile."""
         current_x, current_y = int(self.position[0]), int(self.position[1])
         next_x, next_y = current_x + direction[0], current_y + direction[1]
-        if (0 <= next_y < len(self.game.arena.map) and 
-            0 <= next_x < len(self.game.arena.map[0])):
-            return self.game.arena.map[next_y][next_x] != Dot.WALL
+        if (0 <= next_y < len(self.arena.map) and 
+            0 <= next_x < len(self.arena.map[0])):
+            return self.arena.map[next_y][next_x] != Dot.WALL
         return False
 
     def update_position(self):
-        """Update Pac-Man's position with strict grid-based movement and improved dot eating."""
         x, y = self.position
         at_tile_center = abs(x - int(x)) < 0.1 and abs(y - int(y)) < 0.1
 
-        # Спробуємо з'їсти точку на поточній позиції незалежно від центру плитки
+        # Check for dot collection
         current_x, current_y = int(x), int(y)
-        if (0 <= current_y < len(self.game.arena.map) and 
-            0 <= current_x < len(self.game.arena.map[0])):
-            dot_type = self.game.arena.map[current_y][current_x]
+        if (0 <= current_y < len(self.arena.map) and 
+            0 <= current_x < len(self.arena.map[0])):
+            dot_type = self.arena.map[current_y][current_x]
             if dot_type in (Dot.NORMAL, Dot.PELLET, Dot.FRUIT):
                 if dot_type == Dot.NORMAL:
                     self.score += 10
@@ -51,38 +47,45 @@ class PacMan(Moveable):
                 elif dot_type == Dot.FRUIT:
                     self.score += 100
                     self.fruits += 1
-                self.game.arena.remove_dot((current_x, current_y))
+                self.arena.remove_dot((current_x, current_y))
 
-        # Оновлюємо позицію
+        # Update position
         if not at_tile_center:
-            # Продовжуємо рухатися в поточному напрямку
             self.position = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
         else:
-            # Вирівнюємо до центру плитки
             self.position = (int(x + 0.5), int(y + 0.5))
-
-            # Перевіряємо, чи можна змінити напрямок
             if self.can_move(self.next_direction):
                 self.direction = self.next_direction
             elif not self.can_move(self.direction):
                 self.direction = (0, 0)
-
-            # Рухаємося в новому напрямку, якщо можливо
             if self.direction != (0, 0) and self.can_move(self.direction):
                 self.position = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
 
     def get_sprite(self) -> Sprite:
-        """Return the current sprite based on direction and animation."""
+        # Cycle through 3 sprites for animation
         if self.direction != (0, 0):
-            self.animation_frame = (self.animation_frame + self.animation_speed) % 3
+            self.animation_frame = (self.animation_frame + self.animation_speed) % len(self.sprites)
         else:
-            self.animation_frame = 0
-        direction_map = {(1, 0): 0, (-1, 0): 1, (0, -1): 2, (0, 1): 3}
-        direction_idx = direction_map.get(self.direction, 0)
-        return self.all_sprites[direction_idx][int(self.animation_frame)]
+            self.animation_frame = 0  # Show first sprite when stationary
+        
+        # Get base sprite
+        base_sprite = self.sprites[int(self.animation_frame)]
+        
+        # Rotate sprite based on direction
+        if self.direction == (1, 0):  # Right (default, no rotation)
+            return base_sprite
+        elif self.direction == (-1, 0):  # Left (flip horizontally)
+            rotated_texture = pygame.transform.flip(base_sprite.texture, True, False)
+            return Sprite(rotated_texture, base_sprite.area.copy())
+        elif self.direction == (0, -1):  # Up (rotate 90° counterclockwise)
+            rotated_texture = pygame.transform.rotate(base_sprite.texture, 90)
+            return Sprite(rotated_texture, pygame.Rect(0, 0, base_sprite.area.h, base_sprite.area.w))
+        elif self.direction == (0, 1):  # Down (rotate 90° clockwise)
+            rotated_texture = pygame.transform.rotate(base_sprite.texture, -90)
+            return Sprite(rotated_texture, pygame.Rect(0, 0, base_sprite.area.h, base_sprite.area.w))
+        return base_sprite  # Fallback to default if direction is (0, 0)
 
     def get_hitbox(self) -> pygame.Rect:
-        """Return the hitbox matching ghost logic."""
         sprite = self.get_sprite()
         return pygame.Rect(
             self.position[0] * sprite.area.w / 2,
@@ -90,3 +93,10 @@ class PacMan(Moveable):
             sprite.area.w,
             sprite.area.h
         )
+
+    def update_destination(self):
+        pass  # Not used
+
+    def move(self, map):
+        self.update_position()  # Redirect to update_position
+

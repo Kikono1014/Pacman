@@ -1,31 +1,32 @@
 import pygame
 import sys
 from sprite import Sprite
-from arena import Arena, Dot
-from pacman import PacMan
-from ghosts import Blinky, Pinky, Inky, Clyde
 from gameobject import GameObject
-import random
+from moveable import Moveable
+from arena import Arena, Dot
+from ghosts import Blinky, Pinky, Inky, Clyde
+from pacman import Pacman
+from random import randint
 
 class PacmanGame:
     def sprites_init(self):
         atlas = pygame.image.load('sprites/pacman_sprites.png')
         dot_sprites = [
-            Sprite(atlas, pygame.Rect(10 * 16, 3 * 16, 16, 16)).scale(self.scale),  # Нормальна точка
-            Sprite(atlas, pygame.Rect(12 * 16, 3 * 16, 16, 16)).scale(self.scale),  # Порожньо
-            Sprite(atlas, pygame.Rect(11 * 16, 3 * 16, 16, 16)).scale(self.scale),  # Пелета
+            Sprite(atlas, pygame.Rect(10 * 16, 3 * 16, 16, 16)).scale(self.scale),  # Normal dot
+            Sprite(atlas, pygame.Rect(12 * 16, 3 * 16, 16, 16)).scale(self.scale),  # Empty
+            Sprite(atlas, pygame.Rect(11 * 16, 3 * 16, 16, 16)).scale(self.scale),  # Pellet
         ]
-        for i in range(2, 10):
+        for i in range(2, 10):  # Fruits
             dot_sprites.append(
-                Sprite(atlas, pygame.Rect(i * 16, 3 * 16, 16, 16)).scale(self.scale)  # Фрукти
+                Sprite(atlas, pygame.Rect(i * 16, 3 * 16, 16, 16)).scale(self.scale)
             )
         self.sprites["dot_sprites"] = dot_sprites
         
+        # Pacman sprites: 3 frames (no directional sprites, as in Code #2)
         self.sprites["pacman"] = [
-            [Sprite(atlas, pygame.Rect(i * 16, 0 * 16, 16, 16)).scale(self.scale) for i in range(3)],  # Right
-            [Sprite(atlas, pygame.Rect(i * 16, 1 * 16, 16, 16)).scale(self.scale) for i in range(3)],  # Left
-            [Sprite(atlas, pygame.Rect(i * 16, 2 * 16, 16, 16)).scale(self.scale) for i in range(3)],  # Up
-            [Sprite(atlas, pygame.Rect(i * 16, 3 * 16, 16, 16)).scale(self.scale) for i in range(3)],  # Down
+            Sprite(atlas, pygame.Rect(0 * 16, 0 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(1 * 16, 0 * 16, 16, 16)).scale(self.scale),
+            Sprite(atlas, pygame.Rect(2 * 16, 0 * 16, 16, 16)).scale(self.scale),
         ]
 
     def __init__(self, frame_rate, width, height, scale, preset):
@@ -43,7 +44,7 @@ class PacmanGame:
 
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
-        self.pacman = PacMan(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.108)
+        self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.108, self.arena)
         self.pacman.game = self
 
         self.ghosts = [
@@ -63,39 +64,31 @@ class PacmanGame:
         sprite = object.get_sprite()
         self.screen.blit(sprite.texture, object.get_hitbox(), sprite.area)
 
-    def render_arena(self):
-        for y in range(len(self.arena.map)):
-            for x in range(len(self.arena.map[0])):
-                self.render_object(self.arena.objects[y][x])
-
     def render(self):
         self.screen.fill((0, 0, 0))
         self.screen.blit(self.arena.background.texture, (0, 0))
-        self.render_arena()
-
         self.render_object(self.pacman)
         for ghost in self.ghosts:
             if ghost.is_active:
                 self.render_object(ghost)
-
         pygame.display.update()
 
     def update(self):
         self.pacman.update_position()
 
-        # Додаємо фрукт випадково, якщо багато точок з'їдено
+        # Add fruit based on conditions
         empty_count = len(self.arena.get_dots(Dot.EMPTY))
         fruit_count = len(self.arena.get_dots(Dot.FRUIT))
-        if empty_count > 80 and fruit_count == 0 and random.randint(0, 100) == 20:
-            self.arena.add_fruit(self.pacman.fruits)  # Передаємо кількість з'їдених фруктів
+        if empty_count > 80 and fruit_count == 0 and randint(0, 100) == 20:
+            self.arena.add_fruit(self.pacman.fruits)
 
         for ghost in self.ghosts:
-            ghost.move()
+            ghost.move(self.arena.map)
             if ghost.check_collision(self.pacman):
                 if ghost.mode == "frightened":
                     ghost.position = self.arena.ghost_start
                     ghost.is_active = False
-                    ghost.respawn_timer = 120
+                    ghost.respawn_timer = 120  # 2 seconds at 60 FPS
                     self.pacman.score += 200
                 elif ghost.is_active:
                     self.pacman.lives -= 1

@@ -28,15 +28,18 @@ class Ghost(Moveable):
         ]
         self.mode_index = 0
         self.mode_timer = 0
-
         self.sprites = sprites
         self.current_frame = 0
-        self.animation_speed = 0.1
+        self.animation_speed = 0.05  # Зменшено для плавнішої анімації (12 кадрів при 60 FPS)
 
     def get_sprite(self):
         self.current_frame = (self.current_frame + self.animation_speed) % 2
         if self.mode == "frightened":
-            return self.sprites[4][int(self.current_frame) % 2]  # Frightened animation
+            # Лише два перших спрайти (сині) до останніх 2 секунд, потім миготіння з білими
+            if self.frightened_timer > 120:  # Перші 5 секунд (420 - 120 = 300 кадрів)
+                return self.sprites[4][int(self.current_frame)]  # Лише сині (0 і 1)
+            else:  # Останні 2 секунди
+                return self.sprites[4][int(self.current_frame * 2) % 4]  # Миготіння (0, 1, 2, 3)
         else:
             direction_id = {(1, 0): 0, (-1, 0): 1, (0, -1): 2, (0, 1): 3}.get(self.direction, 0)
             return self.sprites[direction_id][int(self.current_frame)]
@@ -45,9 +48,7 @@ class Ghost(Moveable):
         next_pos = tuple(map(sum, zip(self.position, direction)))
         x, y = int(next_pos[0]), int(next_pos[1])
         if 0 <= y < len(self.arena.map) and 0 <= x < len(self.arena.map[0]):
-            if self.arena.map[y][x] == Dot.WALL:
-                return False
-            return True
+            return self.arena.map[y][x] != Dot.WALL
         return False
 
     def check_collision(self, pacman):
@@ -61,16 +62,15 @@ class Ghost(Moveable):
         self.current_frame = 0
 
     def update_destination(self):
-        # This method will be overridden in child classes
-        pass
+        pass  # Overridden in subclasses
 
-    def move(self):
+    def move(self, arena_map: list[list[Dot]]):
         if not self.is_active:
             self.respawn_timer -= 1
             if self.respawn_timer <= 0:
                 self.is_active = True
                 self.position = self.arena.ghost_start
-                self.mode_index = 0  # Reset mode on respawn
+                self.mode_index = 0
                 self.mode_timer = 0
             return
 
@@ -88,8 +88,8 @@ class Ghost(Moveable):
         # Move only at intersections
         if self.position[0] % 1 < 0.1 and self.position[1] % 1 < 0.1:
             directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-            valid_directions = [d for d in directions if self.can_move(d) and d != tuple(-x for x in self.direction)]  # No reversing
-            if not valid_directions:  # If no options except reverse
+            valid_directions = [d for d in directions if self.can_move(d) and d != tuple(-x for x in self.direction)]
+            if not valid_directions:
                 valid_directions = [d for d in directions if self.can_move(d)]
 
             if valid_directions:
@@ -114,5 +114,4 @@ class Ghost(Moveable):
                     self.rotate(best_direction)
 
         # Smooth movement
-        next_pos = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
-        self.position = next_pos
+        self.position = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))

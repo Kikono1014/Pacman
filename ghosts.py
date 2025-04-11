@@ -1,6 +1,6 @@
-import pygame
 from ghost import Ghost
 from sprite import Sprite
+import pygame
 
 class Blinky(Ghost):
     def __init__(self, position: tuple[int, int], direction: tuple[int, int], speed: float, arena, pacman, scale: float):
@@ -16,7 +16,9 @@ class Blinky(Ghost):
             [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (len(self.arena.map[0]) - 1, 0)
@@ -41,7 +43,9 @@ class Pinky(Ghost):
             [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (0, 0)
@@ -70,7 +74,9 @@ class Inky(Ghost):
             [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (len(self.arena.map[0]) - 1, len(self.arena.map) - 1)
@@ -104,14 +110,16 @@ class Clyde(Ghost):
             [Sprite(atlas, pygame.Rect(6 * 16, row, 16, 16)).scale(scale),
              Sprite(atlas, pygame.Rect(7 * 16, row, 16, 16)).scale(scale)],
             [Sprite(atlas, pygame.Rect(8 * 16, 4 * 16, 16, 16)).scale(scale),
-             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale)]
+             Sprite(atlas, pygame.Rect(9 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(10 * 16, 4 * 16, 16, 16)).scale(scale),
+             Sprite(atlas, pygame.Rect(11 * 16, 4 * 16, 16, 16)).scale(scale)],
         ]
         super().__init__(sprites, position, direction, speed, arena, pacman)
         self.scatter_point = (0, len(self.arena.map) - 1)
 
     def update_destination(self):
         if self.mode == "chase":
-            distance = ((self.position[0] - self.pacman.position[0]) ** 2 +
+            distance = ((self.position[0] - self.pacman.position[0]) ** 2 + 
                         (self.position[1] - self.pacman.position[1]) ** 2) ** 0.5
             if distance > 8:
                 self.destination = self.pacman.position
