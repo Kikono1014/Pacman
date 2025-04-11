@@ -14,10 +14,32 @@ class Moveable(GameObject):
         super().__init__(sprites, position)
         self.direction: tuple[int, int] = direction
         self.speed: float = speed
+        # Reference to arena will be set by subclasses
+        self.arena = None
 
     def move(self):
         # Smooth movement: update position based on direction and speed
-        self.position = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
+        new_position = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
+        
+        # Get map dimensions and wrap around
+        if self.arena:
+            map_width = len(self.arena.map[0])
+            map_height = len(self.arena.map)
+            
+            x, y = new_position
+            if x < 0:
+                x += map_width
+            elif x >= map_width:
+                x -= map_width
+            if y < 0:
+                y += map_height
+            elif y >= map_height:
+                y -= map_height
+                
+            self.position = (x, y)
+        else:
+            # Fallback if arena is not set
+            self.position = new_position
 
     def rotate(self, direction: tuple[int, int]):
         self.direction = direction

@@ -47,9 +47,10 @@ class Ghost(Moveable):
     def can_move(self, direction: tuple[int, int]) -> bool:
         next_pos = tuple(map(sum, zip(self.position, direction)))
         x, y = int(next_pos[0]), int(next_pos[1])
-        if 0 <= y < len(self.arena.map) and 0 <= x < len(self.arena.map[0]):
-            return self.arena.map[y][x] != Dot.WALL
-        return False
+        # Wrap coordinates for collision check
+        x = x % len(self.arena.map[0])
+        y = y % len(self.arena.map)
+        return self.arena.map[y][x] != Dot.WALL
 
     def check_collision(self, pacman):
         pacman_hitbox = pacman.get_hitbox()
@@ -113,5 +114,5 @@ class Ghost(Moveable):
                     )
                     self.rotate(best_direction)
 
-        # Smooth movement
-        self.position = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
+        # Use Moveable's move method to handle position update with wrapping
+        super().move()

@@ -23,10 +23,10 @@ class Pacman(Moveable):
     def can_move(self, direction: tuple[int, int]) -> bool:
         current_x, current_y = int(self.position[0]), int(self.position[1])
         next_x, next_y = current_x + direction[0], current_y + direction[1]
-        if (0 <= next_y < len(self.arena.map) and 
-            0 <= next_x < len(self.arena.map[0])):
-            return self.arena.map[next_y][next_x] != Dot.WALL
-        return False
+        # Allow movement across map edges for wrapping
+        next_x = next_x % len(self.arena.map[0])
+        next_y = next_y % len(self.arena.map)
+        return self.arena.map[next_y][next_x] != Dot.WALL
 
     def update_position(self):
         x, y = self.position
@@ -49,9 +49,24 @@ class Pacman(Moveable):
                     self.fruits += 1
                 self.arena.remove_dot((current_x, current_y))
 
+        # Get map dimensions
+        map_width = len(self.arena.map[0])
+        map_height = len(self.arena.map)
+
         # Update position
         if not at_tile_center:
-            self.position = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
+            new_position = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
+            x, y = new_position
+            # Wrap around
+            if x < 0:
+                x += map_width
+            elif x >= map_width:
+                x -= map_width
+            if y < 0:
+                y += map_height
+            elif y >= map_height:
+                y -= map_height
+            self.position = (x, y)
         else:
             self.position = (int(x + 0.5), int(y + 0.5))
             if self.can_move(self.next_direction):
@@ -59,7 +74,18 @@ class Pacman(Moveable):
             elif not self.can_move(self.direction):
                 self.direction = (0, 0)
             if self.direction != (0, 0) and self.can_move(self.direction):
-                self.position = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
+                new_position = tuple(map(lambda x, y: x + y * self.speed, self.position, self.direction))
+                x, y = new_position
+                # Wrap around
+                if x < 0:
+                    x += map_width
+                elif x >= map_width:
+                    x -= map_width
+                if y < 0:
+                    y += map_height
+                elif y >= map_height:
+                    y -= map_height
+                self.position = (x, y)
 
     def get_sprite(self) -> Sprite:
         # Cycle through 3 sprites for animation
