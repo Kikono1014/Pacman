@@ -1,8 +1,8 @@
-import pygame
-from moveable import Moveable
+﻿import pygame
 from sprite import Sprite
-from arena import Dot
 from typing import Tuple
+from arena import Dot
+from moveable import Moveable
 
 class Pacman(Moveable):
     def __init__(self, sprites: list[Sprite], position: tuple[int, int], direction: tuple[int, int], speed: float, arena):
@@ -14,8 +14,10 @@ class Pacman(Moveable):
         self.fruits: int = 0
         self.next_direction: Tuple[int, int] = direction
         self.animation_frame: float = 0.0
-        self.animation_speed: float = 0.1
+        # Adjusted animation speed to match classic Pac-Man (approximately 4 frames per tile at 6 FPS)
+        self.animation_speed: float = 0.15
         self.game = None
+        self.last_direction: Tuple[int, int] = direction  # Track last moving direction for sprite
 
     def rotate(self, direction: tuple[int, int]):
         self.next_direction = direction
@@ -67,6 +69,8 @@ class Pacman(Moveable):
             elif y >= map_height:
                 y -= map_height
             self.position = (x, y)
+            if self.direction != (0, 0):
+                self.last_direction = self.direction  # Update last direction when moving
         else:
             self.position = (int(x + 0.5), int(y + 0.5))
             if self.can_move(self.next_direction):
@@ -97,16 +101,17 @@ class Pacman(Moveable):
         # Get base sprite
         base_sprite = self.sprites[int(self.animation_frame)]
         
-        # Rotate sprite based on direction
-        if self.direction == (1, 0):  # Right (default, no rotation)
+        # Rotate sprite based on last_direction to maintain orientation when stopped
+        direction = self.last_direction if self.direction == (0, 0) else self.direction
+        if direction == (1, 0):  # Right (default, no rotation)
             return base_sprite
-        elif self.direction == (-1, 0):  # Left (flip horizontally)
+        elif direction == (-1, 0):  # Left (flip horizontally)
             rotated_texture = pygame.transform.flip(base_sprite.texture, True, False)
             return Sprite(rotated_texture, base_sprite.area.copy())
-        elif self.direction == (0, -1):  # Up (rotate 90° counterclockwise)
+        elif direction == (0, -1):  # Up (rotate 90° counterclockwise)
             rotated_texture = pygame.transform.rotate(base_sprite.texture, 90)
             return Sprite(rotated_texture, pygame.Rect(0, 0, base_sprite.area.h, base_sprite.area.w))
-        elif self.direction == (0, 1):  # Down (rotate 90° clockwise)
+        elif direction == (0, 1):  # Down (rotate 90° clockwise)
             rotated_texture = pygame.transform.rotate(base_sprite.texture, -90)
             return Sprite(rotated_texture, pygame.Rect(0, 0, base_sprite.area.h, base_sprite.area.w))
         return base_sprite  # Fallback to default if direction is (0, 0)
