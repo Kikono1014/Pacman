@@ -94,7 +94,8 @@
               "RelativeToolTip": "gameobject.py",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2025-04-03T12:37:22.296Z"
+              "WhenOpened": "2025-04-03T12:37:22.296Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -116,7 +117,7 @@
               "RelativeDocumentMoniker": "main.py",
               "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\main.py",
               "RelativeToolTip": "main.py",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAACIAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-04-03T12:35:28.693Z",
               "EditorCaption": ""
@@ -143,8 +144,7 @@
               "RelativeToolTip": "moveable.py",
               "ViewState": "AgIAABMAAAAAAAAAAAAjwCoAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2025-04-03T12:35:30.364Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-03T12:35:30.364Z"
             },
             {
               "$type": "Document",
@@ -154,7 +154,7 @@
               "RelativeDocumentMoniker": "pacman.py",
               "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\pacman.py",
               "RelativeToolTip": "pacman.py",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAH8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-04-03T12:41:04.695Z",
               "EditorCaption": ""
