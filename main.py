@@ -44,10 +44,12 @@ class PacmanGame:
 
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
-
         self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.108, self.arena)
 
         self.pacman.game = self
+
+        self.score = 0
+        self.high_score = 0 # best result
 
         self.ghosts = [
             Blinky(self.arena.ghost_start, (0, 1), 0.09, self.arena, self.pacman, self.scale),
@@ -73,12 +75,39 @@ class PacmanGame:
         for ghost in self.ghosts:
             if ghost.is_active:
                 self.render_object(ghost)
+        
+        # Отображаем счёт и количество фруктов
+        font = pygame.font.SysFont("Arial", 24)
+        score_text = font.render(f"Score: {self.pacman.score}", True, (255, 255, 255))
+        fruits_text = font.render(f"Fruits: {self.pacman.fruits}", True, (255, 255, 255))
+        self.screen.blit(score_text, (10, 10))  # Счёт
+        self.screen.blit(fruits_text, (10, 50))  # Количество фруктов
+
         pygame.display.update()
 
     def update(self):
         self.pacman.update_position()
 
-        # Add fruit based on conditions
+        x, y = int(self.pacman.position[0]), int(self.pacman.position[1])
+        current_dot = self.arena.map[y][x]
+
+        if current_dot == Dot.NORMAL:
+            self.pacman.score += 10
+            self.arena.remove_dot((x, y))
+
+        elif current_dot == Dot.PELLET:
+            self.pacman.score += 50
+            self.arena.remove_dot((x, y))
+            # Перевести всех призраков в frightened режим
+            for ghost in self.ghosts:
+                ghost.set_frightened()
+
+        elif current_dot == Dot.FRUIT:
+            self.pacman.score += 100
+            self.pacman.fruits += 1
+            self.arena.remove_dot((x, y))
+
+        # Добавляем фрукты в игру
         empty_count = len(self.arena.get_dots(Dot.EMPTY))
         fruit_count = len(self.arena.get_dots(Dot.FRUIT))
         if empty_count > 80 and fruit_count == 0 and randint(0, 100) == 20:
@@ -90,7 +119,7 @@ class PacmanGame:
                 if ghost.mode == "frightened":
                     ghost.position = self.arena.ghost_start
                     ghost.is_active = False
-                    ghost.respawn_timer = 120  # 2 seconds at 60 FPS
+                    ghost.respawn_timer = 120  # 2 секунды при 60 FPS
                     self.pacman.score += 200
                 elif ghost.is_active:
                     self.pacman.lives -= 1
