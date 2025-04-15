@@ -83,6 +83,12 @@ class PacmanGame:
         self.screen.blit(score_text, (10, 10))  # Счёт
         self.screen.blit(fruits_text, (10, 50))  # Количество фруктов
 
+        for i in range(self.pacman.lives):
+            life_sprite = self.sprites["pacman"][0]  # Первая анимация Pac-Man
+            x = 10 + i * (life_sprite.texture.get_width() + 10)
+            y = self.height - life_sprite.texture.get_height() - 10
+            self.screen.blit(life_sprite.texture, (x, y), life_sprite.area)
+
         pygame.display.update()
 
     def update(self):

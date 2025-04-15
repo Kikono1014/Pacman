@@ -42,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 14,
+          "SelectedChildIndex": 15,
           "Children": [
             {
               "$type": "Bookmark",
@@ -86,6 +86,19 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ghost.py",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Pacman\\ghost.py",
+              "RelativeDocumentMoniker": "ghost.py",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\ghost.py",
+              "RelativeToolTip": "ghost.py",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAgwHUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
+              "WhenOpened": "2025-04-03T12:37:37.901Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 4,
               "Title": "ghosts.py",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\Pacman\\ghosts.py",
@@ -118,7 +131,7 @@
               "RelativeDocumentMoniker": "pacman.py",
               "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\pacman.py",
               "RelativeToolTip": "pacman.py",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-04-03T12:41:04.695Z",
               "EditorCaption": ""
@@ -144,22 +157,9 @@
               "RelativeDocumentMoniker": "main.py",
               "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\main.py",
               "RelativeToolTip": "main.py",
-              "ViewState": "AgIAADkAAAAAAAAAAAAgwFcAAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAADMAAAAAAAAAAAAAAE4AAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-04-03T12:35:28.693Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ghost.py",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Pacman\\ghost.py",
-              "RelativeDocumentMoniker": "ghost.py",
-              "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\ghost.py",
-              "RelativeToolTip": "ghost.py",
-              "ViewState": "AgIAAEEAAAAAAAAAAAAgwHUAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2025-04-03T12:37:37.901Z",
               "EditorCaption": ""
             },
             {
