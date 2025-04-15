@@ -44,7 +44,7 @@ class PacmanGame:
 
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
-        self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.208, self.arena)
+        self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.108, self.arena)
 
         self.pacman.game = self
 
