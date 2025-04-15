@@ -107,8 +107,7 @@
               "RelativeToolTip": "ghosts.py",
               "ViewState": "AgIAAEwAAAAAAAAAAAAgwIAAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2025-04-03T12:37:48.306Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-03T12:37:48.306Z"
             },
             {
               "$type": "Document",
@@ -120,8 +119,7 @@
               "RelativeToolTip": "moveable.py",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADMAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2025-04-03T12:35:30.364Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-03T12:35:30.364Z"
             },
             {
               "$type": "Document",
@@ -131,7 +129,7 @@
               "RelativeDocumentMoniker": "pacman.py",
               "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\pacman.py",
               "RelativeToolTip": "pacman.py",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAA1AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-04-03T12:41:04.695Z",
               "EditorCaption": ""
@@ -146,8 +144,7 @@
               "RelativeToolTip": "sprite.py",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2025-04-03T12:38:39.506Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-03T12:38:39.506Z"
             },
             {
               "$type": "Document",
@@ -157,7 +154,7 @@
               "RelativeDocumentMoniker": "main.py",
               "ToolTip": "C:\\Users\\User\\Desktop\\Pacman\\main.py",
               "RelativeToolTip": "main.py",
-              "ViewState": "AgIAADMAAAAAAAAAAAAAAE4AAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAJMAAAAAAAAAAAAswKUAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
               "WhenOpened": "2025-04-03T12:35:28.693Z",
               "EditorCaption": ""
@@ -172,8 +169,7 @@
               "RelativeToolTip": "gameobject.py",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2025-04-03T12:37:22.296Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-03T12:37:22.296Z"
             },
             {
               "$type": "Document",
@@ -185,8 +181,7 @@
               "RelativeToolTip": "arena.py",
               "ViewState": "AgIAADsAAAAAAAAAAAAgwG8AAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2025-04-03T12:37:10.005Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-03T12:37:10.005Z"
             }
           ]
         }
