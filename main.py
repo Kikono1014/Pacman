@@ -105,11 +105,9 @@ class PacmanGame:
 
         if current_dot == Dot.NORMAL:
             self.pacman.score += 10
-            self.arena.remove_dot((x, y))
 
         elif current_dot == Dot.PELLET:
             self.pacman.score += 50
-            self.arena.remove_dot((x, y))
             # Перевести всех призраков в frightened режим
             for ghost in self.ghosts:
                 ghost.set_frightened()
@@ -117,7 +115,8 @@ class PacmanGame:
         elif current_dot == Dot.FRUIT:
             self.pacman.score += 100
             self.pacman.fruits += 1
-            self.arena.remove_dot((x, y))
+
+        self.arena.remove_dot((x, y))
 
         # Добавляем фрукты в игру
         empty_count = len(self.arena.get_dots(Dot.EMPTY))
@@ -129,7 +128,8 @@ class PacmanGame:
             ghost.move(self.arena.map)
             if ghost.check_collision(self.pacman):
                 if ghost.mode == "frightened":
-                    ghost.position = self.arena.ghost_start
+                    ghost.mode = "chase"
+                    ghost.position = tuple(map(sum, zip(self.arena.ghost_start , (0, 2))))
                     ghost.is_active = False
                     ghost.respawn_timer = 120  # 2 секунды при 60 FPS
                     self.pacman.score += 200
@@ -198,23 +198,13 @@ if __name__ == '__main__':
                 game.playing = False
                 break  # Прерываем цикл и выходим из игры
             elif keys[pygame.K_r]:  # Перезапуск при нажатии R
-                # game = PacmanGame(60, 232, 256, scale, preset)  # Перезапускаем игру
-                game.pacman.lives = 3
-                game.pacman.score = 0
-                game.pacman.fruits = 0
-                game.pacman.position = game.arena.pacman_start
-                for ghost in game.ghosts:
-                    ghost.position = game.arena.ghost_start
-                
-                game.game_over = False
-
-                game.arena.build()
+                game = PacmanGame(60, 232, 256, scale, preset)  # Перезапускаем игру
                 # continue  # Возвращаемся к следующей итерации цикла, чтобы продолжить игру
 
-        else:
-            pygame.display.update()  # Обновляем экран
+        # else:
+            # pygame.display.update()  # Обновляем экран
 
-        pygame.time.Clock().tick(60)  # Задержка на 60 FPS (чтобы не перегружать процессор)
+        # pygame.time.Clock().tick(60)  # Задержка на 60 FPS (чтобы не перегружать процессор)
 
     pygame.quit()
     sys.exit()
