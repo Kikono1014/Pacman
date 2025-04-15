@@ -44,7 +44,7 @@ class PacmanGame:
 
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
-        self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.108, self.arena)
+        self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.208, self.arena)
 
         self.pacman.game = self
 
@@ -138,7 +138,6 @@ class PacmanGame:
                     self.pacman.position = self.arena.pacman_start
                     if self.pacman.lives <= 0:
                         self.game_over = True
-                        self.playing = False
 
         self.clock.tick(self.frame_rate)
 
@@ -169,7 +168,7 @@ if __name__ == '__main__':
 
     game = PacmanGame(60, 232, 256, scale, preset)
 
-    while True:  # Игра будет продолжаться, пока игрок не решит выйти
+    while game.playing:  # Игра будет продолжаться, пока игрок не решит выйти
         game.proceed_event()  # Обрабатываем события
 
         # Если игра не завершена, обновляем её
@@ -199,8 +198,18 @@ if __name__ == '__main__':
                 game.playing = False
                 break  # Прерываем цикл и выходим из игры
             elif keys[pygame.K_r]:  # Перезапуск при нажатии R
-                game = PacmanGame(60, 232, 256, scale, preset)  # Перезапускаем игру
-                continue  # Возвращаемся к следующей итерации цикла, чтобы продолжить игру
+                # game = PacmanGame(60, 232, 256, scale, preset)  # Перезапускаем игру
+                game.pacman.lives = 3
+                game.pacman.score = 0
+                game.pacman.fruits = 0
+                game.pacman.position = game.arena.pacman_start
+                for ghost in game.ghosts:
+                    ghost.position = game.arena.ghost_start
+                
+                game.game_over = False
+
+                game.arena.build()
+                # continue  # Возвращаемся к следующей итерации цикла, чтобы продолжить игру
 
         else:
             pygame.display.update()  # Обновляем экран
