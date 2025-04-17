@@ -14,7 +14,7 @@ class Pacman(Moveable):
         self.fruits: int = 0
         self.next_direction: Tuple[int, int] = direction
         self.animation_frame: float = 0.0
-        self.animation_speed: float = 0.1
+        self.animation_speed: float = 0.02
         self.game = None
 
     def rotate(self, direction: tuple[int, int]):

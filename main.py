@@ -157,6 +157,8 @@ class PacmanGame:
                 elif ghost.is_active:
                     self.pacman.lives -= 1
                     self.pacman.position = self.arena.pacman_start
+                    self.pacman.direction = (1, 0)
+                    self.pacman.next_direction = (1, 0)
                     if self.pacman.lives <= 0:
                         self.game_over = True
 
