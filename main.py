@@ -1,5 +1,6 @@
 ﻿import pygame
 import sys
+import os
 from sprite import Sprite
 from gameobject import GameObject
 from moveable import Moveable
@@ -29,28 +30,38 @@ class PacmanGame:
             Sprite(atlas, pygame.Rect(2 * 16, 0 * 16, 16, 16)).scale(self.scale),
         ]
 
-    def __init__(self, frame_rate, width, height, scale, preset):
-        self.frame_rate = frame_rate
-        self.scale = scale
-        self.width = width * self.scale
-        self.height = height * self.scale
+        self.sprites["live"] = self.sprites["pacman"][0]
 
-        self.clock = pygame.time.Clock()
-        pygame.display.set_caption("Pacman")
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF | pygame.HWSURFACE)
+    def play_opening(self):
+        pygame.mixer.music.set_endevent(self.OPENING_END_EVENT)
+        self.sounds["OpeningSong"] = pygame.mixer.music.load(os.getcwd() + "/sounds/" + "OpeningSong.wav");
+        pygame.mixer.music.play()
+        self.opening = True
 
-        self.sprites = {}
-        self.sprites_init()
 
-        self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
+    def sounds_init(self):
+        path = os.getcwd() + "/sounds/";
+        self.sounds["Dies"] = pygame.mixer.Sound(path + "Dies.wav");
+        self.sounds["EatingCherry"] = pygame.mixer.Sound(path + "EatingCherry.wav");
+        self.sounds["EatingGhost"] = pygame.mixer.Sound(path + "EatingGhost.wav");
+        self.sounds["ExtraLive"] = pygame.mixer.Sound(path + "ExtraLive.wav");
+        self.sounds["Intermission"] = pygame.mixer.Sound(path + "Intermission.wav");
+        
+        self.OPENING_END_EVENT = pygame.USEREVENT + 1
+        self.play_opening()
 
-        self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.108, self.arena)
 
-        self.pacman.game = self
 
-        self.score = 0
-        self.high_score = 0 # best result
+        self.sounds["Siren"] = pygame.mixer.Sound(path + "Siren.wav");
+        
+        self.sounds["WakaWaka"] = pygame.mixer.Sound(path + "WakaWaka.wav");
+        self.sounds["WakaWaka1"] = pygame.mixer.Sound(path + "WakaWaka1.wav");
+    
+        self.waka = 1
+    
+    
 
+    def ghosts_init(self):
         self.ghosts = [
             Blinky(self.arena.ghost_start, (0, 1), 0.09, self.arena, self.pacman, self.scale),
             Pinky(self.arena.ghost_start, (0, -1), 0.09, self.arena, self.pacman, self.scale),
@@ -61,12 +72,93 @@ class PacmanGame:
             ghost.game = self
             ghost.mode = "scatter"
 
+
+    def __init__(self, frame_rate, width, height, scale, preset):
+        self.frame_rate = frame_rate
+        self.scale = scale
+        self.preset = preset
+        self.width = width * self.scale
+        self.height = (height + 20) * self.scale
+
+        self.clock = pygame.time.Clock()
+        pygame.display.set_caption("Pacman")
+        self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF | pygame.HWSURFACE)
+
+        self.sprites = {}
+        self.sprites_init()
+
+        self.sounds = {}
+        self.sounds_init()
+
+        self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
+
+        self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.108, self.arena)
+        self.pacman.game = self
+
+        self.ghosts_init()
+
+        self.score = 0
+        self.high_score = 0 # best result
+
         self.playing = True
         self.game_over = False
+        self.game_won = False
 
     def render_object(self, object: GameObject):
         sprite = object.get_sprite()
         self.screen.blit(sprite.texture, object.get_hitbox(), sprite.area)
+
+    def render_lives(self):
+        y = self.height - self.sprites["live"].texture.get_height() - 10
+        for i in range(self.pacman.lives):
+            x = 10 + i * (self.sprites["live"].texture.get_width() + 10)
+            self.screen.blit(self.sprites["live"].texture, (x, y), self.sprites["live"].area)
+
+    def render_score(self):
+        font = pygame.font.SysFont("Arial", 24)
+        text = font.render(f"Score: {self.pacman.score} Fruits: {self.pacman.fruits}", True, (255, 255, 255))
+        x = self.width - text.get_width() - 10
+        y = self.height - self.sprites["live"].texture.get_height() - 10
+        self.screen.blit(text, (x, y))
+
+    def render_game_over(self):
+        font = pygame.font.SysFont("Arial", 48, bold=True)
+        game_over_text = font.render("GAME OVER", True, (255, 0, 0))
+        text_rect = game_over_text.get_rect(center=(game.width // 2, game.height // 2))
+        
+        # Отображаем сообщение для перезапуска
+        restart_text = pygame.font.SysFont("Arial", 24).render("Press R to Restart or Q to Quit", True, (255, 255, 255))
+        restart_rect = restart_text.get_rect(center=(game.width // 2, game.height // 2 + 50))
+        
+        surface_rect = pygame.Rect(restart_rect.left, text_rect.top,
+                                    restart_rect.width,
+                                    text_rect.height + restart_rect.height)
+        surface = pygame.Surface((surface_rect.w, surface_rect.h))
+        surface.fill((0, 0, 0))
+
+        game.screen.blit(surface, surface_rect)
+        game.screen.blit(restart_text, restart_rect)
+        game.screen.blit(game_over_text, text_rect)
+
+    def render_game_won(self):
+        font = pygame.font.SysFont("Arial", 48, bold=True)
+        game_won_text = font.render("Game Won", True, (0, 255, 0))
+        text_rect = game_won_text.get_rect(center=(game.width // 2, game.height // 2))
+        
+        # Отображаем сообщение для перезапуска
+        restart_text = pygame.font.SysFont("Arial", 24).render("Press R to Restart or Q to Quit", True, (255, 255, 255))
+        restart_rect = restart_text.get_rect(center=(game.width // 2, game.height // 2 + 50))
+        
+        surface_rect = pygame.Rect(restart_rect.left, text_rect.top,
+                                    restart_rect.width,
+                                    text_rect.height + restart_rect.height)
+        surface = pygame.Surface((surface_rect.w, surface_rect.h))
+        surface.fill((0, 0, 0))
+
+        game.screen.blit(surface, surface_rect)
+        game.screen.blit(restart_text, restart_rect)
+        game.screen.blit(game_won_text, text_rect)
+
 
     def render(self):
         self.screen.fill((0, 0, 0))
@@ -77,27 +169,23 @@ class PacmanGame:
                 self.render_object(ghost)
         
         # Отображаем счёт и количество фруктов
-        font = pygame.font.SysFont("Arial", 24)
-        score_text = font.render(f"Score: {self.pacman.score}", True, (255, 255, 255))
-        fruits_text = font.render(f"Fruits: {self.pacman.fruits}", True, (255, 255, 255))
-        self.screen.blit(score_text, (10, 10))  # Счёт
-        self.screen.blit(fruits_text, (10, 50))  # Количество фруктов
+        self.render_score()
 
-        for i in range(self.pacman.lives):
-            life_sprite = self.sprites["pacman"][0]  # Первая анимация Pac-Man
-            x = 10 + i * (life_sprite.texture.get_width() + 10)
-            y = self.height - life_sprite.texture.get_height() - 10
-            self.screen.blit(life_sprite.texture, (x, y), life_sprite.area)
+        self.render_lives()
 
-        if self.game_over:
-           font_big = pygame.font.SysFont("Arial", 48, bold=True)
-           game_over_text = font_big.render("GAME OVER", True, (255, 0, 0))
-           text_rect = game_over_text.get_rect(center=(self.width // 2, self.height // 2))
-           self.screen.blit(game_over_text, text_rect)
+        # Если игра завершена, показываем сообщение "GAME OVER"
+        if (self.game_over):
+            self.render_game_over()
+        
+        if (self.game_won):
+            self.render_game_won()
 
         pygame.display.update()
 
     def update(self):
+        if (self.opening):
+            return
+        
         self.pacman.update_position()
 
         x, y = int(self.pacman.position[0]), int(self.pacman.position[1])
@@ -106,16 +194,26 @@ class PacmanGame:
         if current_dot == Dot.NORMAL:
             self.pacman.score += 10
 
+            if (self.waka == 1):
+                self.sounds["WakaWaka"].play()
+                self.waka = 0;
+            else:
+                self.sounds["WakaWaka1"].play()
+                self.waka = 1
+
         elif current_dot == Dot.PELLET:
             self.pacman.score += 50
+
             # Перевести всех призраков в frightened режим
             for ghost in self.ghosts:
                 ghost.set_frightened()
 
         elif current_dot == Dot.FRUIT:
-            self.pacman.score += 100
+            self.pacman.score += 1000
             self.pacman.fruits += 1
+            self.sounds["EatingCherry"].play()
 
+        
         self.arena.remove_dot((x, y))
 
         # Добавляем фрукты в игру
@@ -123,6 +221,9 @@ class PacmanGame:
         fruit_count = len(self.arena.get_dots(Dot.FRUIT))
         if empty_count > 80 and fruit_count == 0 and randint(0, 100) == 20:
             self.arena.add_fruit(self.pacman.fruits)
+
+        if (len(self.arena.get_dots(Dot.NORMAL)) == 0):
+            self.game_won = True
 
         for ghost in self.ghosts:
             ghost.move(self.arena.map)
@@ -133,16 +234,31 @@ class PacmanGame:
                     ghost.is_active = False
                     ghost.respawn_timer = 120  # 2 секунды при 60 FPS
                     self.pacman.score += 200
+                    self.sounds["EatingGhost"].play()
+                    
                 elif ghost.is_active:
                     self.pacman.lives -= 1
                     self.pacman.position = self.arena.pacman_start
+                    self.pacman.direction = (1, 0)
+                    self.pacman.next_direction = (1, 0)
                     if self.pacman.lives <= 0:
                         self.game_over = True
+                        pygame.mixer.pause()
+                        self.sounds["Dies"].play()
+
+
+        if (self.pacman.score == 10_000):
+            self.pacman.lives += 1
+            self.sounds["ExtraLive"].play()
 
         self.clock.tick(self.frame_rate)
 
     def proceed_event(self):
         for e in pygame.event.get():
+            if e.type == self.OPENING_END_EVENT:
+                self.opening = False;
+                self.sounds["Siren"].play(loops=-1)
+                pygame.mixer.unpause()
             if e.type == pygame.QUIT:
                 self.playing = False
             if e.type == pygame.KEYDOWN:
@@ -156,9 +272,19 @@ class PacmanGame:
                     self.pacman.rotate((0, 1))
                 if e.key == pygame.K_d or e.key == pygame.K_RIGHT:
                     self.pacman.rotate((1, 0))
+                if e.key == pygame.K_r:  # Перезапуск при нажатии R
+                    self.arena.build()
+                    self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.108, self.arena)
+                    self.pacman.game = self
+                    self.ghosts_init()
+                    self.play_opening()
+                    self.playing = True
+                    self.game_over = False
+                    self.game_won = False
 
 if __name__ == '__main__':
     pygame.init()
+    pygame.mixer.init()
     preset = 1
     scale = 2
     if len(sys.argv) >= 2:
@@ -178,33 +304,7 @@ if __name__ == '__main__':
         # Отображаем игру (счёт, персонажа, призраков и т.д.)
         game.render()
 
-        # Если игра завершена, показываем сообщение "GAME OVER"
-        if game.game_over:
-            font = pygame.font.SysFont("Arial", 48, bold=True)
-            game_over_text = font.render("GAME OVER", True, (255, 0, 0))
-            text_rect = game_over_text.get_rect(center=(game.width // 2, game.height // 2))
-            game.screen.blit(game_over_text, text_rect)
 
-            # Отображаем сообщение для перезапуска
-            restart_text = pygame.font.SysFont("Arial", 24).render("Press R to Restart or ESC to Quit", True, (255, 255, 255))
-            restart_rect = restart_text.get_rect(center=(game.width // 2, game.height // 2 + 50))
-            game.screen.blit(restart_text, restart_rect)
-
-            pygame.display.update()  # Обновляем экран
-
-            # Проверка на нажатие клавиш
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_ESCAPE]:  # Выход при нажатии ESC
-                game.playing = False
-                break  # Прерываем цикл и выходим из игры
-            elif keys[pygame.K_r]:  # Перезапуск при нажатии R
-                game = PacmanGame(60, 232, 256, scale, preset)  # Перезапускаем игру
-                # continue  # Возвращаемся к следующей итерации цикла, чтобы продолжить игру
-
-        # else:
-            # pygame.display.update()  # Обновляем экран
-
-        # pygame.time.Clock().tick(60)  # Задержка на 60 FPS (чтобы не перегружать процессор)
 
     pygame.quit()
     sys.exit()

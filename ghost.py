@@ -30,7 +30,7 @@ class Ghost(Moveable):
         self.mode_timer = 0
         self.sprites = sprites
         self.current_frame = 0
-        self.animation_speed = 0.05  # Зменшено для плавнішої анімації (12 кадрів при 60 FPS)
+        self.animation_speed = 0.005  # Зменшено для плавнішої анімації (12 кадрів при 60 FPS)
 
     def get_sprite(self):
         self.current_frame = (self.current_frame + self.animation_speed) % 2

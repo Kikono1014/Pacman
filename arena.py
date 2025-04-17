@@ -2,6 +2,7 @@ import pygame
 from sprite import Sprite
 from enum import Enum
 from random import choice
+import copy
 
 class Dot(Enum):
     NORMAL = 0
@@ -12,14 +13,17 @@ class Dot(Enum):
     
 class Arena:
     def __init__(self, area: pygame.Rect, scale: float, dot_sprites: list[Sprite], preset: int):
-        self.background = Sprite(pygame.image.load(f'sprites/arena{preset}.png'), area).scale(scale)
         self.dot_sprites = dot_sprites
         self.pacman_start: tuple[int, int] = None
         self.ghost_start: tuple[int, int] = None
         self.preset = preset
+        self.area = area
+        self.scale = scale
         self.build()
 
     def build(self):
+        self.background = Sprite(pygame.image.load(f'sprites/arena{self.preset}.png'),
+                                 copy.deepcopy(self.area)).scale(self.scale)
         with open(f'./data/arena{self.preset}/size.txt', 'r') as file:
             values = file.readline().split(" ")
             width = int(values[0])
