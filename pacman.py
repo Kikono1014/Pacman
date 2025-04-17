@@ -32,23 +32,6 @@ class Pacman(Moveable):
         x, y = self.position
         at_tile_center = abs(x - int(x)) < 0.1 and abs(y - int(y)) < 0.1
 
-        # Check for dot collection
-        current_x, current_y = int(x), int(y)
-        if (0 <= current_y < len(self.arena.map) and 
-            0 <= current_x < len(self.arena.map[0])):
-            dot_type = self.arena.map[current_y][current_x]
-            if dot_type in (Dot.NORMAL, Dot.PELLET, Dot.FRUIT):
-                if dot_type == Dot.NORMAL:
-                    self.score += 10
-                elif dot_type == Dot.PELLET:
-                    self.score += 50
-                    for ghost in self.game.ghosts:
-                        ghost.set_frightened()
-                elif dot_type == Dot.FRUIT:
-                    self.score += 100
-                    self.fruits += 1
-                self.arena.remove_dot((current_x, current_y))
-
         # Get map dimensions
         map_width = len(self.arena.map[0])
         map_height = len(self.arena.map)

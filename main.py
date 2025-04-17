@@ -1,5 +1,6 @@
 ﻿import pygame
 import sys
+import os
 from sprite import Sprite
 from gameobject import GameObject
 from moveable import Moveable
@@ -31,6 +32,35 @@ class PacmanGame:
 
         self.sprites["live"] = self.sprites["pacman"][0]
 
+    def play_opening(self):
+        pygame.mixer.music.set_endevent(self.OPENING_END_EVENT)
+        self.sounds["OpeningSong"] = pygame.mixer.music.load(os.getcwd() + "/sounds/" + "OpeningSong.wav");
+        pygame.mixer.music.play()
+        self.opening = True
+
+
+    def sounds_init(self):
+        path = os.getcwd() + "/sounds/";
+        self.sounds["Dies"] = pygame.mixer.Sound(path + "Dies.wav");
+        self.sounds["EatingCherry"] = pygame.mixer.Sound(path + "EatingCherry.wav");
+        self.sounds["EatingGhost"] = pygame.mixer.Sound(path + "EatingGhost.wav");
+        self.sounds["ExtraLive"] = pygame.mixer.Sound(path + "ExtraLive.wav");
+        self.sounds["Intermission"] = pygame.mixer.Sound(path + "Intermission.wav");
+        
+        self.OPENING_END_EVENT = pygame.USEREVENT + 1
+        self.play_opening()
+
+
+
+        self.sounds["Siren"] = pygame.mixer.Sound(path + "Siren.wav");
+        
+        self.sounds["WakaWaka"] = pygame.mixer.Sound(path + "WakaWaka.wav");
+        self.sounds["WakaWaka1"] = pygame.mixer.Sound(path + "WakaWaka1.wav");
+    
+        self.waka = 1
+    
+    
+
     def ghosts_init(self):
         self.ghosts = [
             Blinky(self.arena.ghost_start, (0, 1), 0.09, self.arena, self.pacman, self.scale),
@@ -48,7 +78,7 @@ class PacmanGame:
         self.scale = scale
         self.preset = preset
         self.width = width * self.scale
-        self.height = (height + 16) * self.scale
+        self.height = (height + 20) * self.scale
 
         self.clock = pygame.time.Clock()
         pygame.display.set_caption("Pacman")
@@ -56,6 +86,9 @@ class PacmanGame:
 
         self.sprites = {}
         self.sprites_init()
+
+        self.sounds = {}
+        self.sounds_init()
 
         self.arena = Arena(pygame.Rect(0, 0, width, height), scale, self.sprites["dot_sprites"], preset)
 
@@ -150,6 +183,9 @@ class PacmanGame:
         pygame.display.update()
 
     def update(self):
+        if (self.opening):
+            return
+        
         self.pacman.update_position()
 
         x, y = int(self.pacman.position[0]), int(self.pacman.position[1])
@@ -158,16 +194,26 @@ class PacmanGame:
         if current_dot == Dot.NORMAL:
             self.pacman.score += 10
 
+            if (self.waka == 1):
+                self.sounds["WakaWaka"].play()
+                self.waka = 0;
+            else:
+                self.sounds["WakaWaka1"].play()
+                self.waka = 1
+
         elif current_dot == Dot.PELLET:
             self.pacman.score += 50
+
             # Перевести всех призраков в frightened режим
             for ghost in self.ghosts:
                 ghost.set_frightened()
 
         elif current_dot == Dot.FRUIT:
-            self.pacman.score += 100
+            self.pacman.score += 1000
             self.pacman.fruits += 1
+            self.sounds["EatingCherry"].play()
 
+        
         self.arena.remove_dot((x, y))
 
         # Добавляем фрукты в игру
@@ -188,6 +234,8 @@ class PacmanGame:
                     ghost.is_active = False
                     ghost.respawn_timer = 120  # 2 секунды при 60 FPS
                     self.pacman.score += 200
+                    self.sounds["EatingGhost"].play()
+                    
                 elif ghost.is_active:
                     self.pacman.lives -= 1
                     self.pacman.position = self.arena.pacman_start
@@ -195,11 +243,22 @@ class PacmanGame:
                     self.pacman.next_direction = (1, 0)
                     if self.pacman.lives <= 0:
                         self.game_over = True
+                        pygame.mixer.pause()
+                        self.sounds["Dies"].play()
+
+
+        if (self.pacman.score == 10_000):
+            self.pacman.lives += 1
+            self.sounds["ExtraLive"].play()
 
         self.clock.tick(self.frame_rate)
 
     def proceed_event(self):
         for e in pygame.event.get():
+            if e.type == self.OPENING_END_EVENT:
+                self.opening = False;
+                self.sounds["Siren"].play(loops=-1)
+                pygame.mixer.unpause()
             if e.type == pygame.QUIT:
                 self.playing = False
             if e.type == pygame.KEYDOWN:
@@ -218,12 +277,14 @@ class PacmanGame:
                     self.pacman = Pacman(self.sprites["pacman"], self.arena.pacman_start, (1, 0), 0.108, self.arena)
                     self.pacman.game = self
                     self.ghosts_init()
+                    self.play_opening()
                     self.playing = True
                     self.game_over = False
                     self.game_won = False
 
 if __name__ == '__main__':
     pygame.init()
+    pygame.mixer.init()
     preset = 1
     scale = 2
     if len(sys.argv) >= 2:
