@@ -100,6 +100,8 @@ class PacmanGame:
         self.score = 0
         self.high_score = 0 # best result
 
+        self.extra_life_given = False
+
         self.playing = True
         self.game_over = False
         self.game_won = False
@@ -247,7 +249,8 @@ class PacmanGame:
                         self.sounds["Dies"].play()
 
 
-        if (self.pacman.score == 10_000):
+        if (self.pacman.score >= 10_000 and self.extra_life_given == False):
+            self.extra_life_given = True
             self.pacman.lives += 1
             self.sounds["ExtraLive"].play()
 
@@ -278,6 +281,7 @@ class PacmanGame:
                     self.pacman.game = self
                     self.ghosts_init()
                     self.play_opening()
+                    self.extra_life_given = False
                     self.playing = True
                     self.game_over = False
                     self.game_won = False
