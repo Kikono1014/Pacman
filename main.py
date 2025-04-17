@@ -69,7 +69,6 @@ class PacmanGame:
 
         self.playing = True
         self.game_over = False
-        self.game_won = False
 
     def render_object(self, object: GameObject):
         sprite = object.get_sprite()
@@ -93,30 +92,12 @@ class PacmanGame:
             font = pygame.font.SysFont("Arial", 48, bold=True)
             game_over_text = font.render("GAME OVER", True, (255, 0, 0))
             text_rect = game_over_text.get_rect(center=(game.width // 2, game.height // 2))
-            
-            surface = pygame.Surface((text_rect.w / 2, text_rect.h / 2))
-            surface.fill((0, 0, 0))
-            self.background.texture.blit(surface, text_rect)
-            
             game.screen.blit(game_over_text, text_rect)
 
             # Отображаем сообщение для перезапуска
             restart_text = pygame.font.SysFont("Arial", 24).render("Press R to Restart or Q to Quit", True, (255, 255, 255))
             restart_rect = restart_text.get_rect(center=(game.width // 2, game.height // 2 + 50))
             game.screen.blit(restart_text, restart_rect)
-
-    def render_game_w0n(self):
-        if game.game_over:
-            font = pygame.font.SysFont("Arial", 48, bold=True)
-            game_over_text = font.render("Game Won", True, (0, 255, 0))
-            text_rect = game_over_text.get_rect(center=(game.width // 2, game.height // 2))
-            game.screen.blit(game_over_text, text_rect)
-
-            # Отображаем сообщение для перезапуска
-            restart_text = pygame.font.SysFont("Arial", 24).render("Press R to Restart or Q to Quit", True, (255, 255, 255))
-            restart_rect = restart_text.get_rect(center=(game.width // 2, game.height // 2 + 50))
-            game.screen.blit(restart_text, restart_rect)
-
 
     def render(self):
         self.screen.fill((0, 0, 0))
@@ -134,9 +115,6 @@ class PacmanGame:
         # Если игра завершена, показываем сообщение "GAME OVER"
         if (self.game_over):
             self.render_game_over()
-        
-        if (self.game_won):
-            self.render_game_won()
 
         pygame.display.update()
 
@@ -166,9 +144,6 @@ class PacmanGame:
         fruit_count = len(self.arena.get_dots(Dot.FRUIT))
         if empty_count > 80 and fruit_count == 0 and randint(0, 100) == 20:
             self.arena.add_fruit(self.pacman.fruits)
-
-        if (len(self.arena.get_dots(Dot.NORMAL)) == 0):
-            self.game_won = True
 
         for ghost in self.ghosts:
             ghost.move(self.arena.map)
@@ -211,7 +186,6 @@ class PacmanGame:
                     self.ghosts_init()
                     self.playing = True
                     self.game_over = False
-                    self.game_won = False
 
 if __name__ == '__main__':
     pygame.init()
