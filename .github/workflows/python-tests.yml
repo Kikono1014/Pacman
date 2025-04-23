@@ -1,11 +1,10 @@
-# .github/workflows/python-tests.yml
 name: Run Python Tests and Generate Report
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, Tests ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, Tests ]
 
 jobs:
   test:
