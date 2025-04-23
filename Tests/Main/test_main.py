@@ -11,21 +11,7 @@ from arena import Arena, Dot
 import os
 os.environ['SDL_VIDEODRIVER'] = 'dummy'
 pygame.init()
-pygame.mixer.init()
 import pygame
-
-# @pytest.fixture
-# def mocked_game():
-#     screen = pygame.Surface((232, 256))
-#     with patch('pygame.display.set_mode', return_value=screen):
-#         with patch('pygame.image.load', return_value=MagicMock(spec=pygame.Surface)):
-#             with patch('pygame.mixer.Sound', side_effect=[MagicMock() for _ in range(5)]):
-#                 with patch('pygame.mixer.music.load', return_value=None):
-#                     with patch('pygame.mixer.music.play', return_value=None):
-#                         with patch('builtins.open', mock_open(read_data="1 1")):
-#                             with patch('pygame.transform.scale', return_value=MagicMock(spec=pygame.Surface)):
-#                                 game = PacmanGame(frame_rate=60, width=232, height=256, scale=1, preset=1)
-#                                 return game
 
 
 @pytest.fixture
@@ -34,8 +20,6 @@ def mocked_game(monkeypatch, tmp_path):
 
     monkeypatch.setattr(pygame.display, 'set_mode', lambda *args, **kwargs: screen)
     
-    # atlas = pygame.Surface((16*14, 16*10))
-    # monkeypatch.setattr(pygame.image, 'load', lambda path: atlas)
     
     monkeypatch.setattr(pygame.transform, 'scale', lambda surf, size: surf)
     
