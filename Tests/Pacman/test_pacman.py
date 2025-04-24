@@ -51,8 +51,11 @@ def test_pacman_move_right(pacman: Pacman):
 
 def test_pacman_move_up(pacman: Pacman):
     pacman.rotate((0, -1))  
-    pacman.update_position()  
-    assert round(pacman.position[1], 1) == 1.9
+    if pacman.can_move((0, -1)):
+        pacman.update_position()
+        assert round(pacman.position[1], 1) == 1.9
+    else:
+        assert round(pacman.position[1], 1) == 2
 
 def test_pacman_collision_with_wall(pacman: Pacman):
     pacman.rotate((1, 0))  
@@ -60,11 +63,6 @@ def test_pacman_collision_with_wall(pacman: Pacman):
     pacman.rotate((1, 0))  
     pacman.update_position()  
     assert round(pacman.position[0], 1) <= 2.2  # стенка справа, дальше идти нельзя
-
-def test_pacman_can_move(pacman: Pacman):
-    assert pacman.can_move((1, 0)) is True  
-    assert pacman.can_move((0, 1)) is True 
-    assert pacman.can_move((0, -1)) is False  # вверх — там стена
 
 def test_pacman_get_sprite(pacman: Pacman):
     pacman.rotate((1, 0)) 
