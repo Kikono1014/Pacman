@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>flake8 violations: main.py</title>
+      <meta http-equiv="Content-Type" value="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="styles.css">
+<script>
+function bindHandler(link) {
+   var code = link.getAttribute('data-code');
+   var key = location.pathname + '#' + code;
+
+   var ul = link.parentNode.querySelector('.details');
+   if (sessionStorage[key] != 'open') {
+      ul.style.display = 'none';
+   }
+   link.addEventListener('click', function (event) {
+      if (!ul.style.display || ul.style.display == 'none') {
+         ul.style.display = 'block';
+         sessionStorage[key] = 'open';
+      } else {
+         ul.style.display = 'none';
+         sessionStorage[key] = 'closed';
+      }
+   });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+   var links = document.querySelectorAll('#index > li > a');
+   for (var i = 0; i < links.length; i++) {
+      bindHandler(links[i]);
+   }
+});
+</script>
+   </head>
+   <body>
+      <div id="masthead" class="sev-1"></div>
+      <div id="page">
+         <p id="srclink">
+            <a title="View full annotated source"
+               href="main.source.html">
+               <img src="file.svg" alt="&#x2261;">
+            </a></p>
+         <h1>
+            <a href="index.html">
+               <img src="back.svg" alt="&#x2B05;">
+               main.py
+            </a>
+         </h1>
+
+         <ul id="index">
+         
+         <li>
+            <a data-code="F401">
+               <span class="count sev-1">
+                  1
+               </span>
+               <strong>F401:</strong> 'moveable.Moveable' imported but unused
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="main.source.html#l6">
+                  <tt><i>6</i> <span class="kn">from</span><span class="w"> </span><span class="nn">moveable</span><span class="w"> </span><span class="kn">import</span> <span class="n">Moveable</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W293">
+               <span class="count sev-2">
+                  15
+               </span>
+               <strong>W293:</strong> blank line contains whitespace
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="main.source.html#l25">
+                  <tt><i>25</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l49">
+                  <tt><i>49</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l56">
+                  <tt><i>56</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l59">
+                  <tt><i>59</i>     </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l61">
+                  <tt><i>61</i>     </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l62">
+                  <tt><i>62</i>     </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l130">
+                  <tt><i>130</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l134">
+                  <tt><i>134</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l149">
+                  <tt><i>149</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l153">
+                  <tt><i>153</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l172">
+                  <tt><i>172</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l181">
+                  <tt><i>181</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l190">
+                  <tt><i>190</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l218">
+                  <tt><i>218</i>         </tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l240">
+                  <tt><i>240</i>                     </tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E703">
+               <span class="count sev-2">
+                  12
+               </span>
+               <strong>E703:</strong> statement ends with a semicolon
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="main.source.html#l37">
+                  <tt><i>37</i>         <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="s2">&quot;OpeningSong&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">music</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;/sounds/&quot;</span> <span class="o">+</span> <span class="s2">&quot;OpeningSong.wav&quot;</span><span class="p">);</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l43">
+                  <tt><i>43</i>         <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;/sounds/&quot;</span><span class="p">;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l44">
+                  <tt><i>44</i>         <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="s2">&quot;Dies&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">Sound</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;Dies.wav&quot;</span><span class="p">);</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l45">
+                  <tt><i>45</i>         <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="s2">&quot;EatingCherry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">Sound</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;EatingCherry.wav&quot;</span><span class="p">);</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l46">
+                  <tt><i>46</i>         <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="s2">&quot;EatingGhost&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">Sound</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;EatingGhost.wav&quot;</span><span class="p">);</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l47">
+                  <tt><i>47</i>         <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="s2">&quot;ExtraLive&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">Sound</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;ExtraLive.wav&quot;</span><span class="p">);</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l48">
+                  <tt><i>48</i>         <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="s2">&quot;Intermission&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">Sound</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;Intermission.wav&quot;</span><span class="p">);</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l55">
+                  <tt><i>55</i>         <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="s2">&quot;Siren&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">Sound</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;Siren.wav&quot;</span><span class="p">);</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l57">
+                  <tt><i>57</i>         <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="s2">&quot;WakaWaka&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">Sound</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;WakaWaka.wav&quot;</span><span class="p">);</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l58">
+                  <tt><i>58</i>         <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="s2">&quot;WakaWaka1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">Sound</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;WakaWaka1.wav&quot;</span><span class="p">);</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l201">
+                  <tt><i>201</i>                 <span class="bp">self</span><span class="o">.</span><span class="n">waka</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l262">
+                  <tt><i>262</i>                 <span class="bp">self</span><span class="o">.</span><span class="n">opening</span> <span class="o">=</span> <span class="kc">False</span><span class="p">;</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E303">
+               <span class="count sev-2">
+                  8
+               </span>
+               <strong>E303:</strong> too many blank lines (2)
+               
+                  (and 1 similar)
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <p>Too many blank lines (2):</p>
+               
+               <a href="main.source.html#l42">
+                  <tt><i>42</i>     <span class="k">def</span><span class="w"> </span><span class="nf">sounds_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (3):</p>
+               
+               <a href="main.source.html#l55">
+                  <tt><i>55</i>         <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="s2">&quot;Siren&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">Sound</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s2">&quot;Siren.wav&quot;</span><span class="p">);</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (3):</p>
+               
+               <a href="main.source.html#l64">
+                  <tt><i>64</i>     <span class="k">def</span><span class="w"> </span><span class="nf">ghosts_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (2):</p>
+               
+               <a href="main.source.html#l76">
+                  <tt><i>76</i>     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame_rate</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">scale</span><span class="p">,</span> <span class="n">preset</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (2):</p>
+               
+               <a href="main.source.html#l165">
+                  <tt><i>165</i>     <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (2):</p>
+               
+               <a href="main.source.html#l219">
+                  <tt><i>219</i>         <span class="bp">self</span><span class="o">.</span><span class="n">arena</span><span class="o">.</span><span class="n">remove_dot</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (2):</p>
+               
+               <a href="main.source.html#l252">
+                  <tt><i>252</i>         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pacman</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;=</span> <span class="mi">10_000</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_life_given</span> <span class="o">==</span> <span class="kc">False</span><span class="p">):</span></tt>
+               </a>
+            </li><li>
+               
+               <p>Too many blank lines (3):</p>
+               
+               <a href="main.source.html#l313">
+                  <tt><i>313</i>     <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E127">
+               <span class="count sev-2">
+                  4
+               </span>
+               <strong>E127:</strong> continuation line over-indented for visual indent
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="main.source.html#l136">
+                  <tt><i>136</i>                                     <span class="n">restart_rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l137">
+                  <tt><i>137</i>                                     <span class="n">text_rect</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">restart_rect</span><span class="o">.</span><span class="n">height</span><span class="p">)</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l155">
+                  <tt><i>155</i>                                     <span class="n">restart_rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span></tt>
+               </a>
+            </li><li>
+               
+               <a href="main.source.html#l156">
+                  <tt><i>156</i>                                     <span class="n">text_rect</span><span class="o">.</span><span class="n">height</span> <span class="o">+</span> <span class="n">restart_rect</span><span class="o">.</span><span class="n">height</span><span class="p">)</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E261">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E261:</strong> at least two spaces before inline comment
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="main.source.html#l101">
+                  <tt><i>101</i>         <span class="bp">self</span><span class="o">.</span><span class="n">high_score</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># best result</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E302">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E302:</strong> expected 2 blank lines, found 1
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="main.source.html#l12">
+                  <tt><i>12</i> <span class="k">class</span><span class="w"> </span><span class="nc">PacmanGame</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E305">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E305:</strong> expected 2 blank lines after class or function definition, found 1
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="main.source.html#l289">
+                  <tt><i>289</i> <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="E712">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>E712:</strong> comparison to False should be 'if cond is False:' or 'if not cond:'
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="main.source.html#l252">
+                  <tt><i>252</i>         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pacman</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;=</span> <span class="mi">10_000</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_life_given</span> <span class="o">==</span> <span class="kc">False</span><span class="p">):</span></tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         <li>
+            <a data-code="W391">
+               <span class="count sev-2">
+                  1
+               </span>
+               <strong>W391:</strong> blank line at end of file
+               
+            </a>
+            <ul class="details">
+            <li>
+               
+               <a href="main.source.html#l316">
+                  <tt><i>316</i> &nbsp;</tt>
+               </a>
+            </li>
+            </ul>
+         </li>
+         
+         </ul>
+      </div>
+   </body>
+</html>
